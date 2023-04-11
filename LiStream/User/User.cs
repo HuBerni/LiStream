@@ -58,7 +58,7 @@ namespace LiStream.User
             throw new NotImplementedException();
         }
 
-        public void UnFollowPlayableCOllection(IPlayableCollection collection)
+        public void UnFollowPlayableCollection(IPlayableCollection collection)
         {
             throw new NotImplementedException();
         }
