@@ -50,6 +50,9 @@ namespace LiStreamEF.Models
 
             modelBuilder.Entity<Artist>(entity =>
             {
+                entity.HasIndex(e => e.Email, "UQ__Artists__A9D10534FA718673")
+                    .IsUnique();
+
                 entity.Property(e => e.ArtistId)
                     .ValueGeneratedNever()
                     .HasColumnName("ArtistID");
@@ -199,6 +202,9 @@ namespace LiStreamEF.Models
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534053CE407")
+                    .IsUnique();
+
                 entity.Property(e => e.UserId)
                     .ValueGeneratedNever()
                     .HasColumnName("UserID");
