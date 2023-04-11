@@ -11,7 +11,7 @@ namespace LiStream.Playables.Interfaces
     {
         Guid Id { get; }
         string Name { get; }
-        DateTime Release { get; }
+        DateTime ReleaseDate { get; }
         IArtistProfile Artist { get; }
     }
 }

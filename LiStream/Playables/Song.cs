@@ -18,7 +18,7 @@ namespace LiStream.Playables
 
         public IArtistProfile Artist { get; private set; }
 
-        public IAlbum Album { get; private set; }
+        public IAlbum? Album { get; private set; }
 
         public DateTime ReleaseDate { get; private set; }
 
@@ -29,8 +29,6 @@ namespace LiStream.Playables
         public long PlayCount { get; private set; }
 
         public TimeSpan Lenght { get; private set; }
-
-        public TimeSpan CurrentPosition { get; private set; }
 
         public IPlayable getSimilar()
         {

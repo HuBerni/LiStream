@@ -10,9 +10,9 @@ namespace LiStream.UserManager
 {
     public class UserManager : IUserManager, IUserService
     {
-        public string UserName { get; private set; }
+        public string? UserName { get; private set; }
 
-        public string Email { get; private set; }
+        public string? Email { get; private set; }
 
         public bool ChangePassword(string oldPassword, string newPassword)
         {

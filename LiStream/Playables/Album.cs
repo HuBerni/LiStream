@@ -14,7 +14,7 @@ namespace LiStream.Playables
 
         public string Name { get; private set; }
 
-        public DateTime Release { get; private set; }
+        public DateTime ReleaseDate { get; private set; }
 
         public IArtistProfile Artist { get; private set; }
 

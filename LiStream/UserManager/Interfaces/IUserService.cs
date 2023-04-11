@@ -9,8 +9,8 @@ namespace LiStream.UserManager.Interfaces
 {
     public interface IUserService
     {
-        string UserName { get; }
-        string Email { get; }
+        string? UserName { get; }
+        string? Email { get; }
         
         IUser LoginUser(string username, string password);
         IArtistUser LoginArtist(string username, string password);

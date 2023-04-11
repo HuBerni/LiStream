@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiStream
+namespace LiStream.Interfaces
 {
     public interface IEvaluateable<T>
     {

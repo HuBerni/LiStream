@@ -8,8 +8,8 @@ namespace LiStream.UserManager.Interfaces
 {
     public interface IUserManager
     {
-        string UserName { get; }
-        string Email { get; }
+        string? UserName { get; }
+        string? Email { get; }
 
         void Logout();
         bool ChangePassword(string oldPassword, string newPassword);
