@@ -10,6 +10,6 @@ namespace LiStream.Playables
     public class Genre : IGenre
     {
         public string Name { get; }
-        public string Description { get; }
+        public string? Description { get; }
     }
 }

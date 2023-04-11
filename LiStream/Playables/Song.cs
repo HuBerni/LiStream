@@ -22,9 +22,9 @@ namespace LiStream.Playables
 
         public DateTime ReleaseDate { get; private set; }
 
-        public List<IGenre> Genres { get; private set; }
+        public List<IGenre>? Genres { get; private set; }
 
-        public List<IArtistProfile> Features { get; private set; }
+        public List<IArtistProfile>? Features { get; private set; }
 
         public long PlayCount { get; private set; }
 

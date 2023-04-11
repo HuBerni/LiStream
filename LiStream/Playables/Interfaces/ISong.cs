@@ -15,8 +15,8 @@ namespace LiStream.Playables.Interfaces
         IArtistProfile Artist { get; }
         IAlbum? Album { get; }
         DateTime ReleaseDate { get; }
-        List<IGenre> Genres { get; }
-        List<IArtistProfile> Features { get; }
+        List<IGenre>? Genres { get; }
+        List<IArtistProfile>? Features { get; }
         long PlayCount { get; }
     }
 }

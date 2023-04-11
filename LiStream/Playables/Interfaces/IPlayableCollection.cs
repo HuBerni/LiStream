@@ -9,7 +9,7 @@ namespace LiStream.Playables.Interfaces
 {
     public interface IPlayableCollection : IEvaluateable<IPlayableCollection>
     {
-        List<IPlayable> Playables { get; }
+        List<IPlayable>? Playables { get; }
 
         void Next();
         void Previous();

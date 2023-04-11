@@ -18,7 +18,7 @@ namespace LiStream.Playables
 
         public DateTime CreationDate { get; private set; }
 
-        public List<IPlayable> Playables { get; private set; }
+        public List<IPlayable>? Playables { get; private set; }
 
         public void AddSong(ISong song)
         {

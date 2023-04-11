@@ -9,6 +9,6 @@ namespace LiStream.Playables.Interfaces
     public interface IGenre
     {
         string Name { get; }
-        string Description { get; }
+        string? Description { get; }
     }
 }

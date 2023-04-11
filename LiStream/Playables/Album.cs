@@ -18,7 +18,7 @@ namespace LiStream.Playables
 
         public IArtistProfile Artist { get; private set; }
 
-        public List<IPlayable> Playables { get; private set; }
+        public List<IPlayable>? Playables { get; private set; }
 
         public IPlayableCollection getSimilar()
         {
