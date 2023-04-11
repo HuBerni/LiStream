@@ -16,7 +16,7 @@ namespace LiStream.User.Interfaces
         bool DeletePlaylist(Guid id);
         void Follow(IProfile profile);
         void UnFollow(IProfile profile);
-        void FollowPlayableCOllection(IPlayableCollection collection);
+        void FollowPlayableCollection(IPlayableCollection collection);
         void UnFollowPlayableCollection(IPlayableCollection collection);
         void AddToFavoriteSongs(Guid id);
         void RemoveFromFavoriteSongs(Guid id);
