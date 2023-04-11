@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace LiStream.UserManager.Interfaces
 {
-    internal interface IUserManager
+    public interface IUserManager
     {
+        string UserName { get; }
+        string Email { get; }
+
+        void Logout();
+        bool ChangePassword(string oldPassword, string newPassword);
     }
 }
