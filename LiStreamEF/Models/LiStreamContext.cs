@@ -25,6 +25,8 @@ namespace LiStreamEF.Models
         public virtual DbSet<PlaylistItem> PlaylistItems { get; set; }
         public virtual DbSet<Song> Songs { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserFavoriteSong> UserFavoriteSongs { get; set; }
+        public virtual DbSet<UserFollowedPlayableCollection> UserFollowedPlayableCollections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -218,6 +220,63 @@ namespace LiStreamEF.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UserFavoriteSong>(entity =>
+            {
+                entity.HasKey(e => new { e.SongId, e.UserId });
+
+                entity.Property(e => e.SongId).HasColumnName("SongID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.AddedDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Song)
+                    .WithMany(p => p.UserFavoriteSongs)
+                    .HasForeignKey(d => d.SongId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserFavor__SongI__4CA06362");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserFavoriteSongs)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserFavor__UserI__4D94879B");
+            });
+
+            modelBuilder.Entity<UserFollowedPlayableCollection>(entity =>
+            {
+                entity.HasKey(e => e.FavoriteId);
+
+                entity.HasIndex(e => new { e.UserId, e.AlbumId, e.PlaylistId }, "unique_user_album_or_playlist")
+                    .IsUnique();
+
+                entity.Property(e => e.FavoriteId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("FavoriteID");
+
+                entity.Property(e => e.AlbumId).HasColumnName("AlbumID");
+
+                entity.Property(e => e.PlaylistId).HasColumnName("PlaylistID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.Album)
+                    .WithMany(p => p.UserFollowedPlayableCollections)
+                    .HasForeignKey(d => d.AlbumId)
+                    .HasConstraintName("FK__UserFollo__Album__52593CB8");
+
+                entity.HasOne(d => d.Playlist)
+                    .WithMany(p => p.UserFollowedPlayableCollections)
+                    .HasForeignKey(d => d.PlaylistId)
+                    .HasConstraintName("FK__UserFollo__Playl__5165187F");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserFollowedPlayableCollections)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserFollo__UserI__5070F446");
             });
 
             OnModelCreatingPartial(modelBuilder);

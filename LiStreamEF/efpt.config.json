@@ -47,6 +47,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[UserFavoriteSongs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserFollowedPlayableCollections]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Users]",
          "ObjectType": 0
       }

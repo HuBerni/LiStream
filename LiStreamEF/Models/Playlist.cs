@@ -10,6 +10,7 @@ namespace LiStreamEF.Models
         public Playlist()
         {
             PlaylistItems = new HashSet<PlaylistItem>();
+            UserFollowedPlayableCollections = new HashSet<UserFollowedPlayableCollection>();
         }
 
         public Guid PlaylistId { get; set; }
@@ -19,5 +20,6 @@ namespace LiStreamEF.Models
 
         public virtual User OwnerNavigation { get; set; }
         public virtual ICollection<PlaylistItem> PlaylistItems { get; set; }
+        public virtual ICollection<UserFollowedPlayableCollection> UserFollowedPlayableCollections { get; set; }
     }
 }

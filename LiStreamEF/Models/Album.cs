@@ -10,6 +10,7 @@ namespace LiStreamEF.Models
         public Album()
         {
             Songs = new HashSet<Song>();
+            UserFollowedPlayableCollections = new HashSet<UserFollowedPlayableCollection>();
         }
 
         public Guid AlbumId { get; set; }
@@ -19,5 +20,6 @@ namespace LiStreamEF.Models
 
         public virtual Artist ArtistNavigation { get; set; }
         public virtual ICollection<Song> Songs { get; set; }
+        public virtual ICollection<UserFollowedPlayableCollection> UserFollowedPlayableCollections { get; set; }
     }
 }
