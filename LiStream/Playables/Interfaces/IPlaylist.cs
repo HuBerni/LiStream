@@ -15,6 +15,6 @@ namespace LiStream.Playables.Interfaces
         DateTime CreationDate { get; }
 
         void AddSong(ISong song);
-        void RemoveSOng(ISong song);
+        void RemoveSong(ISong song);
     }
 }

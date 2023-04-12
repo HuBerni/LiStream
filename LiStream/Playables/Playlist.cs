@@ -50,7 +50,7 @@ namespace LiStream.Playables
             throw new NotImplementedException();
         }
 
-        public void RemoveSOng(ISong song)
+        public void RemoveSong(ISong song)
         {
             throw new NotImplementedException();
         }
