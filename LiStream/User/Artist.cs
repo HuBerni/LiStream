@@ -17,10 +17,19 @@ namespace LiStream.User
 
         public string? Bio { get; }
 
-        public List<IArtistProfile>? SimilarArtists { get; private set; }
-
-
         public string DisplayName { get; private set; }
+
+        public string Email { get; private set; }
+
+        public Artist(Guid id, List<IAlbum> albums, List<IPlayable> singles, string bio, string displayName, string email)
+        {
+            Id = id;
+            Albums = albums;
+            Singles = singles;
+            Bio = bio;
+            DisplayName = displayName;
+            Email = email;
+        }
 
         public IArtistProfile getSimilar()
         {

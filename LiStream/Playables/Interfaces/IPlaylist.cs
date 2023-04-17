@@ -1,4 +1,5 @@
 ﻿using LiStream.User.Interfaces;
+using LiStream.User.Interfaces.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,7 @@ namespace LiStream.Playables.Interfaces
 {
     public interface IPlaylist : IPlayableCollection
     {
-        Guid Id { get; }
-        string Name { get; }
-        IUser Owner { get; }
+        IUserProfile Owner { get; }
         DateTime CreationDate { get; }
 
         void AddSong(ISong song);

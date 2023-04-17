@@ -15,9 +15,9 @@ namespace LiStreamEF
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<LiStreamContext>();
-        #pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
             optionsBuilder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
-        #pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
 
 
             return new LiStreamContext(optionsBuilder.Options);

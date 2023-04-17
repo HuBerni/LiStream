@@ -13,6 +13,5 @@ namespace LiStream.User.Interfaces.Profile
         List<IAlbum>? Albums { get; }
         List<IPlayable>? Singles { get; }
         string? Bio { get; }
-        List<IArtistProfile>? SimilarArtists { get; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces;
+using LiStream.User.Interfaces.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,26 @@ using System.Threading.Tasks;
 
 namespace LiStream.Playables
 {
-    internal class Playlist : IPlaylist
+    public class Playlist : IPlaylist
     {
         public Guid Id { get; private set; }
 
         public string Name { get; private set; }
 
-        public IUser Owner { get; private set; }
+        public IUserProfile Owner { get; private set; }
 
         public DateTime CreationDate { get; private set; }
 
         public List<IPlayable>? Playables { get; private set; }
+
+        public Playlist(Guid id, string Name, IUserProfile owner, DateTime creationDate, List<IPlayable>? playables)
+        {
+            Id = id;
+            this.Name = Name;
+            Owner = owner;
+            CreationDate = creationDate;
+            Playables = playables;
+        }
 
         public void AddSong(ISong song)
         {

@@ -9,8 +9,6 @@ namespace LiStream.Playables.Interfaces
 {
     public interface IAlbum : IPlayableCollection
     {
-        Guid Id { get; }
-        string Name { get; }
         DateTime ReleaseDate { get; }
         IArtistProfile Artist { get; }
     }

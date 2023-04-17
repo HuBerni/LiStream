@@ -14,7 +14,7 @@ namespace LiStream.Playables
 
         public byte[] Data { get; private set; }
 
-        public string Title { get; private set; }
+        public string Name { get; private set; }
 
         public IArtistProfile Artist { get; private set; }
 
@@ -22,13 +22,24 @@ namespace LiStream.Playables
 
         public DateTime ReleaseDate { get; private set; }
 
-        public List<IGenre>? Genres { get; private set; }
-
         public List<IArtistProfile>? Features { get; private set; }
 
         public long PlayCount { get; private set; }
 
         public TimeSpan Lenght { get; private set; }
+
+        public Song(Guid id, byte[] data, string title, IArtistProfile artist, IAlbum album, DateTime releaseDate, List<IArtistProfile> features, long playCount, TimeSpan lenght)
+        {
+            Id = id;
+            Data = data;
+            Name = title;
+            Artist = artist;
+            Album = album;
+            ReleaseDate = releaseDate;
+            Features = features;
+            PlayCount = playCount;
+            Lenght = lenght;
+        }
 
         public IPlayable getSimilar()
         {

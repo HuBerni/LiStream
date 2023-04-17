@@ -9,6 +9,9 @@ namespace LiStream.Playables.Interfaces
 {
     public interface IPlayable : IEvaluateable<IPlayable>
     {
+        Guid Id { get; }
+        string Name { get; }
+        DateTime ReleaseDate { get; }
         TimeSpan Lenght { get; }
 
         void Play();

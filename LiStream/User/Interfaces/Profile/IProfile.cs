@@ -10,5 +10,6 @@ namespace LiStream.User.Interfaces.Profile
     {
         Guid Id { get; }
         string DisplayName { get; }
+        string Email { get; }
     }
 }

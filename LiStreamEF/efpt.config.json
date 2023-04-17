@@ -27,19 +27,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Genre]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[PlaylistItems]",
          "ObjectType": 0
       },
       {
          "Name": "[dbo].[Playlists]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[SongGenres]",
          "ObjectType": 0
       },
       {

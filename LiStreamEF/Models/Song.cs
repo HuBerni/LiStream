@@ -12,7 +12,6 @@ namespace LiStreamEF.Models
             PlaylistItems = new HashSet<PlaylistItem>();
             UserFavoriteSongs = new HashSet<UserFavoriteSong>();
             Artists = new HashSet<Artist>();
-            Genres = new HashSet<Genre>();
         }
 
         public Guid SongId { get; set; }
@@ -30,6 +29,5 @@ namespace LiStreamEF.Models
         public virtual ICollection<UserFavoriteSong> UserFavoriteSongs { get; set; }
 
         public virtual ICollection<Artist> Artists { get; set; }
-        public virtual ICollection<Genre> Genres { get; set; }
     }
 }

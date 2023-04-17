@@ -20,7 +20,6 @@ namespace LiStreamEF.Models
 
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<Artist> Artists { get; set; }
-        public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Playlist> Playlists { get; set; }
         public virtual DbSet<PlaylistItem> PlaylistItems { get; set; }
         public virtual DbSet<Song> Songs { get; set; }
@@ -70,39 +69,6 @@ namespace LiStreamEF.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Genre>(entity =>
-            {
-                entity.ToTable("Genre");
-
-                entity.Property(e => e.GenreId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("GenreID");
-
-                entity.Property(e => e.Description).IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.HasMany(d => d.Songs)
-                    .WithMany(p => p.Genres)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "SongGenre",
-                        l => l.HasOne<Song>().WithMany().HasForeignKey("SongId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__SongGenre__SongI__4316F928"),
-                        r => r.HasOne<Genre>().WithMany().HasForeignKey("GenreId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__SongGenre__Genre__440B1D61"),
-                        j =>
-                        {
-                            j.HasKey("GenreId", "SongId");
-
-                            j.ToTable("SongGenres");
-
-                            j.IndexerProperty<Guid>("GenreId").HasColumnName("GenreID");
-
-                            j.IndexerProperty<Guid>("SongId").HasColumnName("SongID");
-                        });
             });
 
             modelBuilder.Entity<Playlist>(entity =>
@@ -204,6 +170,9 @@ namespace LiStreamEF.Models
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasIndex(e => e.Name, "UQ__Users__737584F666B077B4")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Email, "UQ__Users__A9D10534053CE407")
                     .IsUnique();
 

@@ -16,12 +16,21 @@ namespace LiStream.User
 
         public List<IPlaylist>? Playlists { get; private set; }
 
-        public List<IProfile>? FollowedProfiles { get; private set; }
-
         public List<IPlayableCollection>? FollowedPlayableCollections { get; private set; }
 
-
         public string DisplayName { get; private set; }
+
+        public string Email { get; private set; }
+
+        public User(Guid id, List<IPlayable> favPlayables, List<IPlayableCollection> followedCollections, List<IPlaylist> playlists, string displayName, string email)
+        {
+            Id = id;
+            FavoritePlayables = favPlayables;
+            FollowedPlayableCollections = followedCollections;
+            Playlists = playlists;
+            DisplayName = displayName;
+            Email = email;
+        }
 
         public void AddToFavoriteSongs(Guid id)
         {

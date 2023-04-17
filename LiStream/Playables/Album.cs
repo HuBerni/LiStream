@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LiStream.Playables
 {
-    internal class Album : IAlbum
+    public class Album : IAlbum
     {
         public Guid Id { get; private set; }
 
@@ -19,6 +19,15 @@ namespace LiStream.Playables
         public IArtistProfile Artist { get; private set; }
 
         public List<IPlayable>? Playables { get; private set; }
+
+        public Album(Guid id, string name, DateTime releaseDate, IArtistProfile artist, List<IPlayable>? playables)
+        {
+            Id = id;
+            Name = name;
+            ReleaseDate = releaseDate;
+            Artist = artist;
+            Playables = playables;
+        }
 
         public IPlayableCollection getSimilar()
         {

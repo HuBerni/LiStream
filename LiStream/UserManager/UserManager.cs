@@ -1,4 +1,5 @@
-﻿using LiStream.User.Interfaces;
+﻿using LiStream.DataHandler.Interfaces;
+using LiStream.User.Interfaces;
 using LiStream.UserManager.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,13 @@ namespace LiStream.UserManager
         public string? UserName { get; private set; }
 
         public string? Email { get; private set; }
+
+        private readonly IDataHandler _dataHandler;
+
+        public UserManager(IDataHandler dataHandler)
+        {
+            _dataHandler = dataHandler;
+        }
 
         public bool ChangePassword(string oldPassword, string newPassword)
         {
