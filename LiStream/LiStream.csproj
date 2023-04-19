@@ -22,4 +22,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LiStreamData\LiStreamData.csproj" />
+    <ProjectReference Include="..\LiStreamEF\LiStreamEF.csproj" />
+  </ItemGroup>
+
 </Project>

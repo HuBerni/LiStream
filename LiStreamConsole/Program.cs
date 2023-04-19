@@ -1,41 +1,12 @@
-﻿using LiStream.DataHandler;
-using LiStream.DataHandler.DBDataHandler;
-using LiStream.DataHandler.Interfaces;
+﻿
+using LiStream.DataHandler;
 using LiStreamEF;
-using LiStreamEF.Models;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 var factory = new LiStreamContextFactory();
-//IDataHandler dataHandler = new DataHandler(new DBDataWriter(factory.CreateDbContext(args)), new DBDataReader(factory.CreateDbContext(args)));
 
-//var artists = dataHandler.Get<Artist>().ToList();
-//var singleArtist = dataHandler.GetSingle<Artist>(x => x.Name.Contains("L"));
+var handler = new DataHandler(new DbDataWriter(factory.CreateDbContext(args)), new DbDataReader(factory.CreateDbContext(args)));
 
-//var uid = dataHandler.GetSingle<User>(u => u.Name == "Berni").UserId;
+//var x = handler.Reader.GetSong(new Guid("67027542-9DD8-46EC-9D02-44DE5BBCC944"));
+var y = handler.Reader.GetArtistAlbums(new Guid("92788247-575A-4363-8EAC-68CD54FC0D6A"));
 
-
-//var album = context.Albums
-//    .Where(a => a.Name == "Meteora")
-//    .Include(s => s.Songs)
-//    .ThenInclude(a => a.Genres)
-//    .Include(a => a.ArtistNavigation)
-//    .FirstOrDefault();
-
-//var playlist = context.Playlists
-//    .Where(p => p.Name == "Random")
-//    .Include(p => p.PlaylistItems)
-//    .ThenInclude(s => s.Song)
-//    .ThenInclude(a => a.Album)
-//    .FirstOrDefault();
-
-
-//var favCollections = context.UserFollowedPlayableCollections
-//    .Where(f => f.UserId == uid)
-//    .Include(p => p.Playlist)
-//    .ThenInclude(p => p.PlaylistItems)
-//    .ThenInclude(s => s.Song)
-//    .ThenInclude(a => a.Album)
-//    .Include(a => a.Album)
-//    .ToList();
+Console.ReadLine();

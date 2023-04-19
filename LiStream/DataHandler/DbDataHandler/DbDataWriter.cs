@@ -2,23 +2,16 @@
 using LiStream.Playables.Interfaces;
 using LiStream.User;
 using LiStream.User.Interfaces.Profile;
-using LiStreamEF.DTO;
 using LiStreamEF.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LiStreamEF
 {
-    public class DataWriter : IDataWriter
+    public class DbDataWriter : IDataWriter
     {
         private readonly LiStreamContext _context;
 
-        public DataWriter(LiStreamContext context)
+        public DbDataWriter(LiStreamContext context)
         {
             _context = context;
         }
@@ -27,7 +20,7 @@ namespace LiStreamEF
             try
             {
                 var songs = _context.Songs.Where(s => s.AlbumId == albumID);
-                var author = _context.Albums.FirstOrDefault(a => a.AlbumId ==  albumID);
+                var author = _context.Albums.FirstOrDefault(a => a.AlbumId == albumID);
 
                 _context.RemoveRange(songs);
                 _context.Albums.Remove(author);

@@ -1,7 +1,9 @@
 ﻿using LiStream.DataHandler.Interfaces;
+using LiStream.DtoHandler;
 using LiStream.Playables;
 using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
+using LiStreamData.DTO;
 using LiStreamEF.DTO;
 using LiStreamEF.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace LiStreamEF
 {
-    public class DataReader : IDataReader
+    public class DbDataReader : IDataReader
     {
         private readonly LiStreamContext _context;
 
-        public DataReader(LiStreamContext context)
+        public DbDataReader(LiStreamContext context)
         {
             _context = context;
         }
@@ -29,12 +31,16 @@ namespace LiStreamEF
                 .Include(s => s.Songs)
                 .FirstOrDefault(a => a.AlbumId.Equals(albumID));
 
-            return album.ToAlbumDto().ToAlbum();
+            var artist = album.ArtistNavigation.ToArtistDto();
+            var songs = album.Songs.Select(x => x.ToSongDto()).ToList();
+
+            return album.ToAlbumDto(artist).toAlbum();
         }
 
         public List<IAlbum> GetArtistAlbums(Guid artistID)
         {
-            var albums = _context.Albums.Where(a => a.Artist.Equals(artistID)).ToList();
+            var albums = _context.Albums
+                .Where(a => a.Artist.Equals(artistID)).ToList();
 
             var albumList = new List<IAlbum>();
             albums.ForEach(a => albumList.Add(GetAlbum(a.AlbumId)));
@@ -49,7 +55,7 @@ namespace LiStreamEF
                 .Include(s => s.Songs.Where(x => x.AlbumId != null))
                 .FirstOrDefault(x => x.ArtistId.Equals(artistID));
 
-            return artist.ToArtistDto().ToArtist();
+            return artist.ToArtistDto().toArtist();
         }
 
         public List<ISong> GetFavoriteSongs(Guid userID)
@@ -74,7 +80,7 @@ namespace LiStreamEF
                 .Include(x => x.PlaylistItems)
                 .FirstOrDefault(p => p.PlaylistId.Equals(playlistID));
             
-            return playlist.ToPlaylistDto().ToPlaylist();
+            return playlist.ToPlaylistDto().toPlaylist();
         }
 
         public ISong GetSong(Guid songID)
@@ -85,7 +91,11 @@ namespace LiStreamEF
                 .Include(x => x.Album)
                 .FirstOrDefault(s => s.SongId.Equals(songID));
 
-            return song.ToSongDto().ToSong();
+            var artistDto = song.Artist.ToArtistDto();
+            var albumDto = song.Album.ToAlbumDto();
+
+
+            return song.ToSongDto(artistDto, albumDto).toSong();
         }
 
         public List<IPlaylist> GetUserPlaylists(Guid userID)
@@ -107,7 +117,7 @@ namespace LiStreamEF
                 .ThenInclude(x => x.PlaylistItems)
                 .FirstOrDefault(u => u.UserId.Equals(userID));
             
-            return user.ToUserDto().ToUser();
+            return user.ToUserDto().toUser();
         }
     }
 }

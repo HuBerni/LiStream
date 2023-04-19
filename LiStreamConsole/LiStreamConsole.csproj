@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LiStreamEF\LiStreamEF.csproj" />
     <ProjectReference Include="..\LiStream\LiStream.csproj" />
   </ItemGroup>
 

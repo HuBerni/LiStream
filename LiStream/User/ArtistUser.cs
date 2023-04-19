@@ -10,6 +10,11 @@ namespace LiStream.User
 {
     public class ArtistUser : Artist, IArtistUser
     {
+        public ArtistUser(Guid id, List<IAlbum> albums, List<IPlayable> singles, string bio, string displayName, string email) : base(id, albums, singles, bio, displayName, email)
+        {
+
+        }
+
         public void AddAlbum(List<ISong> songs)
         {
             throw new NotImplementedException();
