@@ -12,7 +12,7 @@ namespace LiStream.DataHandler.Interfaces
 {
     public interface IDataWriter
     {
-        bool InsertArtist(ArtistDto artistDto);
+        bool InsertArtist(ArtistDto artist);
         bool InsertUser (UserDto user);
         bool InsertAlbum(AlbumDto album);
         bool InsertPlaylist(PlaylistDto playlist);
