@@ -108,7 +108,7 @@ namespace LiStreamEF
             return playlistList;
         }
 
-        public IUserProfile GetUsers(Guid userID)
+        public IUserProfile GetUser(Guid userID)
         {
             var user = _context.Users
                 .Include(x => x.UserFavoriteSongs)
@@ -116,7 +116,7 @@ namespace LiStreamEF
                 .Include(x => x.Playlists)
                 .ThenInclude(x => x.PlaylistItems)
                 .FirstOrDefault(u => u.UserId.Equals(userID));
-            
+
             return user.ToUserDto().toUser();
         }
     }

@@ -7,6 +7,8 @@ namespace LiStreamEF.DTO
     {
         public static AlbumDto ToAlbumDto(this Album album, ArtistDto? artist = null, List<SongDto>? playables = null)
         {
+            playables = playables ?? new();
+
             return new AlbumDto()
             {
                 Id = album.AlbumId,

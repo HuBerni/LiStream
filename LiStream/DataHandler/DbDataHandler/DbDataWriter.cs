@@ -2,6 +2,7 @@
 using LiStream.Playables.Interfaces;
 using LiStream.User;
 using LiStream.User.Interfaces.Profile;
+using LiStreamData.DTO;
 using LiStreamEF.Models;
 
 
@@ -20,7 +21,7 @@ namespace LiStreamEF
             try
             {
                 var songs = _context.Songs.Where(s => s.AlbumId == albumID);
-                var author = _context.Albums.FirstOrDefault(a => a.AlbumId == albumID);
+                var author = _context.Albums.FirstOrDefault(a => a.AlbumId ==  albumID);
 
                 _context.RemoveRange(songs);
                 _context.Albums.Remove(author);
@@ -183,14 +184,14 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertAlbum(IAlbum album)
+        public bool InsertAlbum(AlbumDto album)
         {
             try
             {
                 var al = new Album
                 {
                     AlbumId = Guid.NewGuid(),
-                    Artist = album.Id,
+                    Artist = album.Artist.Id,
                     Name = album.Name,
                     ReleaseDate = album.ReleaseDate,
                 };
@@ -206,7 +207,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertArtist(ArtistUser artist)
+        public bool InsertArtist(ArtistDto artist)
         {
             try
             {
@@ -266,7 +267,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertPlaylist(IPlaylist playlist)
+        public bool InsertPlaylist(PlaylistDto playlist)
         {
             try
             {
@@ -289,7 +290,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertSong(ISong song)
+        public bool InsertSong(SongDto song)
         {
             try
             {
@@ -378,7 +379,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertUser(IUserProfile user)
+        public bool InsertUser(UserDto user)
         {
             try
             {
@@ -400,7 +401,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool UpdateAlbum(IAlbum album)
+        public bool UpdateAlbum(AlbumDto album)
         {
             try
             {
@@ -419,7 +420,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool UpdateArtist(IArtistProfile artist)
+        public bool UpdateArtist(ArtistDto artist)
         {
             try
             {
@@ -440,7 +441,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool UpdatePlaylist(IPlaylist playlist)
+        public bool UpdatePlaylist(PlaylistDto playlist)
         {
             try
             {
@@ -460,7 +461,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool UpdateSong(ISong song)
+        public bool UpdateSong(SongDto song)
         {
             try
             {
@@ -477,7 +478,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool UpdateUser(IUserProfile user)
+        public bool UpdateUser(UserDto user)
         {
             try
             {

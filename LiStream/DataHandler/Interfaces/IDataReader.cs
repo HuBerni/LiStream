@@ -12,7 +12,7 @@ namespace LiStream.DataHandler.Interfaces
 {
     public interface IDataReader
     {
-        IUserProfile GetUsers(Guid userID);
+        IUserProfile GetUser(Guid userID);
         IArtistProfile GetArtistProfile(Guid artistID);
         ISong GetSong(Guid songID);
         IPlaylist GetPlaylist(Guid playlistID);
