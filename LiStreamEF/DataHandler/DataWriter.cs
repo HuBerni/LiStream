@@ -1,18 +1,15 @@
-﻿using LiStream.DataHandler.Interfaces;
-using LiStream.Playables.Interfaces;
-using LiStream.User;
-using LiStream.User.Interfaces.Profile;
-using LiStreamData.DTO;
+﻿using LiStreamData.DTO;
+using LiStreamData.Interfaces;
 using LiStreamEF.Models;
 
 
 namespace LiStreamEF
 {
-    public class DbDataWriter : IDataWriter
+    public class DataWriter : IDataWriter
     {
         private readonly LiStreamContext _context;
 
-        public DbDataWriter(LiStreamContext context)
+        public DataWriter(LiStreamContext context)
         {
             _context = context;
         }
@@ -478,7 +475,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool UpdateUser(UserDto user)
+        public bool UpdateUserProfile(UserDto user)
         {
             try
             {

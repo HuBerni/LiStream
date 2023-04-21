@@ -12,7 +12,7 @@ namespace LiStream.Playables.Interfaces
         byte[] Data { get; }
         IArtistProfile Artist { get; }
         IAlbum? Album { get; }
-        List<IArtistProfile>? Features { get; }
+        IList<IArtistProfile>? Features { get; }
         long PlayCount { get; }
     }
 }

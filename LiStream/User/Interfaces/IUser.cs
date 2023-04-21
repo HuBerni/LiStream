@@ -10,7 +10,7 @@ namespace LiStream.User.Interfaces
 {
     public interface IUser
     {
-        List<IPlayable>? FavoritePlayables { get; }
+        IList<IPlayable>? FavoritePlayables { get; }
 
         IPlaylist CreatePlaylist(string name);
         bool DeletePlaylist(Guid id);

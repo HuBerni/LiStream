@@ -5,15 +5,28 @@ namespace LiStreamEF.DTO
 {
     public static class PlayableCollectionDtoExtension
     {
-        public static PlayableCollectionDto ToPlayableCollectionDto(this UserFollowedPlayableCollection playableCollection)
+        public static PlayableCollectionDto ToPlayableCollectionDto(this UserFollowedPlayableCollection playableCollection, bool mapUser = false, bool mapAlbumOrPlaylist = false)
         {
-            return new PlayableCollectionDto()
+            var playableCollectionDto = new PlayableCollectionDto
             {
                 Id = playableCollection.FavoriteId,
-                User = playableCollection.User.ToUserDto(),
-                Album = playableCollection.Album.ToAlbumDto(),
-                Playlist = playableCollection.Playlist.ToPlaylistDto(),
             };
+
+            if (mapUser)
+                playableCollectionDto.User = playableCollection.User?.ToUserDto();
+
+            if (mapAlbumOrPlaylist)
+            {
+                playableCollection.Playlist?.ToPlaylistDto();
+                playableCollection.Album?.ToAlbumDto();
+            }
+
+            return playableCollectionDto;
+        }
+
+        public static IList<PlayableCollectionDto> ToPlayableCollectionDto(this ICollection<UserFollowedPlayableCollection> playableCollections)
+        {
+            return playableCollections.Select(x => x.ToPlayableCollectionDto()).ToList();
         }
     }
 }

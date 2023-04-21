@@ -8,7 +8,7 @@
         public ArtistDto? Artist { get; set; }
         public AlbumDto? Album { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public List<ArtistDto>? Features { get; set; }
+        public IList<ArtistDto>? Features { get; set; }
         public long PlayCount { get; set; }
         public TimeSpan Lenght { get; set; }
     }

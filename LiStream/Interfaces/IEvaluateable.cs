@@ -9,6 +9,6 @@ namespace LiStream.Interfaces
     public interface IEvaluateable<T>
     {
         T getSimilar();
-        T getSimilarList();
+        IList<T> getSimilarList();
     }
 }

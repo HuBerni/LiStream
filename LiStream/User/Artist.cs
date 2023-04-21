@@ -11,9 +11,9 @@ namespace LiStream.User
     public class Artist : IArtistProfile
     {
         public Guid Id { get; protected set; }
-        public List<IAlbum>? Albums { get; protected set; }
+        public IList<IAlbum>? Albums { get; protected set; }
 
-        public List<IPlayable>? Singles { get; protected set; }
+        public IList<IPlayable>? Singles { get; protected set; }
 
         public string? Bio { get; }
 
@@ -21,7 +21,7 @@ namespace LiStream.User
 
         public string Email { get; private set; }
 
-        public Artist(Guid id, List<IAlbum> albums, List<IPlayable> singles, string bio, string displayName, string email)
+        public Artist(Guid id, IList<IAlbum> albums, IList<IPlayable> singles, string bio, string displayName, string email)
         {
             Id = id;
             Albums = albums;
@@ -36,7 +36,7 @@ namespace LiStream.User
             throw new NotImplementedException();
         }
 
-        public IArtistProfile getSimilarList()
+        public IList<IArtistProfile> getSimilarList()
         {
             throw new NotImplementedException();
         }

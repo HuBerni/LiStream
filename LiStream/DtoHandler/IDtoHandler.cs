@@ -14,17 +14,17 @@ namespace LiStream.DtoHandler
 {
     public interface IDtoHandler
     {
-        AlbumDto toDto(IAlbum album);
-        IAlbum toAlbum(AlbumDto albumDto);
-        PlaylistDto toDto(IPlaylist playlist);
-        IPlaylist toPlaylist(PlaylistDto playlistDto);
-        ArtistDto toDto(IArtistProfile artist);
-        IArtistProfile toArtist(ArtistDto artistDto);
-        PlayableCollectionDto PlayableCollectionDto(IPlayableCollection playableCollectionDto);
-        IPlayableCollection toPlayableCollection(PlayableCollectionDto playableCollectionDto);
-        SongDto toDto(ISong song);
-        ISong toSong(SongDto songDto);
-        UserDto toDto(IUserProfile user);
-        IUserProfile toUser(UserDto userDto);
+        AlbumDto ToDto(IAlbum album);
+        IAlbum ToAlbum(AlbumDto albumDto);
+        PlaylistDto ToDto(IPlaylist playlist);
+        IPlaylist ToPlaylist(PlaylistDto playlistDto);
+        ArtistDto ToDto(IArtistProfile artist);
+        IArtistProfile ToArtist(ArtistDto artistDto);
+        PlayableCollectionDto ToDto(IPlayableCollection playableCollectionDto);
+        IPlayableCollection ToPlayableCollection(PlayableCollectionDto playableCollectionDto);
+        SongDto ToDto(ISong song);
+        ISong ToSong(SongDto songDto);
+        UserDto ToDto(IUserProfile user);
+        IUserProfile ToUser(UserDto userDto);
     }
 }

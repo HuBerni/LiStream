@@ -5,18 +5,27 @@ namespace LiStreamEF.DTO
 {
     public static class AlbumDtoExtension
     {
-        public static AlbumDto ToAlbumDto(this Album album, ArtistDto? artist = null, List<SongDto>? playables = null)
+        public static AlbumDto ToAlbumDto(this Album album, bool mapArtist = false, bool mapPlayables = false)
         {
-            playables = playables ?? new();
-
-            return new AlbumDto()
+            var albumDto = new AlbumDto
             {
                 Id = album.AlbumId,
                 Name = album.Name,
                 ReleaseDate = album.ReleaseDate,
-                Artist = artist,
-                Playables = playables
             };
+
+            if (mapArtist)
+                albumDto.Artist = album.ArtistNavigation?.ToArtistDto();
+
+            if (mapPlayables)
+                albumDto.Playables = album.Songs?.ToSongDto();
+
+            return albumDto;
+        }
+
+        public static IList<AlbumDto> ToAlbumDto(this ICollection<Album> albums)
+        {
+            return albums.Select(x => x.ToAlbumDto()).ToList();
         }
     }
 }

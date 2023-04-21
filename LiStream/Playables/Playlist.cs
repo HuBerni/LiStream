@@ -19,12 +19,12 @@ namespace LiStream.Playables
 
         public DateTime CreationDate { get; private set; }
 
-        public List<IPlayable>? Playables { get; private set; }
+        public IList<IPlayable>? Playables { get; private set; }
 
-        public Playlist(Guid id, string Name, IUserProfile owner, DateTime creationDate, List<IPlayable>? playables)
+        public Playlist(Guid id, string name, IUserProfile owner, DateTime creationDate, IList<IPlayable>? playables)
         {
             Id = id;
-            this.Name = Name;
+            this.Name = name;
             Owner = owner;
             CreationDate = creationDate;
             Playables = playables;
@@ -40,7 +40,7 @@ namespace LiStream.Playables
             throw new NotImplementedException();
         }
 
-        public IPlayableCollection getSimilarList()
+        public IList<IPlayableCollection> getSimilarList()
         {
             throw new NotImplementedException();
         }

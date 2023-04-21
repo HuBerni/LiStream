@@ -11,7 +11,7 @@ namespace LiStream.Playables.Interfaces
     {
         Guid Id { get; }
         string Name { get; }
-        List<IPlayable>? Playables { get; }
+        IList<IPlayable>? Playables { get; }
 
         void Next();
         void Previous();

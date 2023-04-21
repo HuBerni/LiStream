@@ -12,17 +12,17 @@ namespace LiStream.User
     public class User : IUserProfile, IUser
     {
         public Guid Id { get; private set; }
-        public List<IPlayable>? FavoritePlayables { get; private set; }
+        public IList<IPlayable>? FavoritePlayables { get; private set; }
 
-        public List<IPlaylist>? Playlists { get; private set; }
+        public IList<IPlaylist>? Playlists { get; private set; }
 
-        public List<IPlayableCollection>? FollowedPlayableCollections { get; private set; }
+        public IList<IPlayableCollection>? FollowedPlayableCollections { get; private set; }
 
         public string DisplayName { get; private set; }
 
         public string Email { get; private set; }
 
-        public User(Guid id, List<IPlayable> favPlayables, List<IPlayableCollection> followedCollections, List<IPlaylist> playlists, string displayName, string email)
+        public User(Guid id, IList<IPlayable> favPlayables, IList<IPlayableCollection> followedCollections, IList<IPlaylist> playlists, string displayName, string email)
         {
             Id = id;
             FavoritePlayables = favPlayables;

@@ -22,13 +22,13 @@ namespace LiStream.Playables
 
         public DateTime ReleaseDate { get; private set; }
 
-        public List<IArtistProfile>? Features { get; private set; }
+        public IList<IArtistProfile>? Features { get; private set; }
 
         public long PlayCount { get; private set; }
 
         public TimeSpan Lenght { get; private set; }
 
-        public Song(Guid id, byte[] data, string title, IArtistProfile artist, IAlbum album, DateTime releaseDate, List<IArtistProfile> features, long playCount, TimeSpan lenght)
+        public Song(Guid id, byte[] data, string title, IArtistProfile artist, IAlbum album, DateTime releaseDate, IList<IArtistProfile> features, long playCount, TimeSpan lenght)
         {
             Id = id;
             Data = data;
@@ -46,7 +46,7 @@ namespace LiStream.Playables
             throw new NotImplementedException();
         }
 
-        public IPlayable getSimilarList()
+        public IList<IPlayable> getSimilarList()
         {
             throw new NotImplementedException();
         }

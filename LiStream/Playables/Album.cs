@@ -16,11 +16,11 @@ namespace LiStream.Playables
 
         public DateTime ReleaseDate { get; private set; }
 
-        public IArtistProfile Artist { get; private set; }
+        public IArtistProfile? Artist { get; private set; }
 
-        public List<IPlayable>? Playables { get; private set; }
+        public IList<IPlayable>? Playables { get; private set; }
 
-        public Album(Guid id, string name, DateTime releaseDate, IArtistProfile artist, List<IPlayable>? playables)
+        public Album(Guid id, string name, DateTime releaseDate, IArtistProfile artist, IList<IPlayable>? playables)
         {
             Id = id;
             Name = name;
@@ -34,7 +34,7 @@ namespace LiStream.Playables
             throw new NotImplementedException();
         }
 
-        public IPlayableCollection getSimilarList()
+        public IList<IPlayableCollection> getSimilarList()
         {
             throw new NotImplementedException();
         }

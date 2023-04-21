@@ -13,57 +13,66 @@ using System.Threading.Tasks;
 
 namespace LiStream.DtoHandler
 {
-    public static class DtoHandler
+    public class DtoHandler : IDtoHandler
     {
-        public static PlayableCollectionDto PlayableCollectionDto(this IPlayableCollection playableCollectionDto)
+        public PlayableCollectionDto ToDto(IPlayableCollection playableCollectionDto)
         {
             var dto = new PlayableCollectionDto();
             dto.Id = playableCollectionDto.Id;
 
             if (playableCollectionDto is IAlbum album)
-                dto.Album = toDto(album);
+                dto.Album = ToDto(album);
 
             if (playableCollectionDto is IPlaylist playlist)
-                dto.Playlist = toDto(playlist);
+                dto.Playlist = ToDto(playlist);
 
             return dto;
         }
 
-        public static IAlbum toAlbum(this AlbumDto albumDto)
+        public IAlbum ToAlbum(AlbumDto albumDto)
         {
-            var album = new Album(albumDto.Id, albumDto.Name, albumDto.ReleaseDate, null, null);
+            IList<IPlayable>? playables = albumDto.Playables?.Select(x => ToSong(x)).ToList<IPlayable>();
+            IArtistProfile? artist =  albumDto.Artist is not null ? ToArtist(albumDto.Artist) : null;
+
+
+            var album = new Album(albumDto.Id, albumDto.Name, albumDto.ReleaseDate, artist, playables);
 
             return album;
         }
 
-        public static IArtistProfile toArtist(this ArtistDto artistDto)
+        public IArtistProfile ToArtist(ArtistDto artistDto)
         {
-            var artist = new Artist(artistDto.Id, null, null, artistDto.Bio, artistDto.DisplayName, artistDto.Email);
+            IList<IAlbum> album = artistDto.Albums?.Select(x => ToAlbum(x)).ToList();
+            IList<IPlayable> singles = artistDto.Singles?.Select(x => ToSong(x)).ToList<IPlayable>();
+
+            var artist = new Artist(artistDto.Id, album, singles, artistDto.Bio, artistDto.DisplayName, artistDto.Email);
 
             return artist;
         }
 
-        public static AlbumDto toDto(this IAlbum album)
+        public AlbumDto ToDto(IAlbum album)
         {
             var albumDto = new AlbumDto
             {
                 Id = album.Id,
                 Name = album.Name,
                 ReleaseDate = album.ReleaseDate,
-                Artist = toDto(album.Artist),
+                Artist = album.Artist != null ? ToDto(album.Artist) : null,
                 Playables = null
             };
 
             return albumDto;
         }
 
-        public static ArtistDto toDto(this IArtistProfile artist)
+        public ArtistDto ToDto(IArtistProfile artist)
         {
+            var singles = artist.Singles?.Select(x => ToDto((ISong)x)).ToList();
+
             var artistDto = new ArtistDto
             {
                 Id = artist.Id,
-                Albums = artist.Albums.Select(a => toDto(a)).ToList(),
-                Singles = null,
+                Albums = artist.Albums?.Select(a => ToDto(a)).ToList(),
+                Singles = singles,
                 Bio = artist.Bio,
                 DisplayName = artist.DisplayName,
                 Email = artist.Email
@@ -71,21 +80,23 @@ namespace LiStream.DtoHandler
 
             return artistDto;
         }
-        public static PlaylistDto toDto(this IPlaylist playlist)
+        public PlaylistDto ToDto(IPlaylist playlist)
         {
+            var playables = playlist.Playables?.Select(x => ToDto((ISong)x)).ToList();
+
             var playlistDto = new PlaylistDto
             {
                 Id = playlist.Id,
                 Name = playlist.Name,
                 CreationDate = playlist.CreationDate,
-                Playables = null,
-                Owner = toDto(playlist.Owner)
+                Playables = playables,
+                Owner = playlist.Owner != null ? ToDto(playlist.Owner) : null
             };
 
             return playlistDto;
         }
 
-        public static SongDto toDto(this ISong song)
+        public SongDto ToDto(ISong song)
         {
             var songDto = new SongDto
             {
@@ -94,16 +105,16 @@ namespace LiStream.DtoHandler
                 Name = song.Name,
                 ReleaseDate = song.ReleaseDate,
                 Lenght = song.Lenght,
-                Features = song.Features.Select(f => toDto(f)).ToList(),
-                Artist = toDto(song.Artist),
-                Album = toDto(song.Album),
+                Features = song.Features.Select(f => ToDto(f)).ToList(),
+                Artist =  song.Artist != null ? ToDto(song.Artist) : null,
+                Album = song.Album != null ? ToDto(song.Album) : null,
                 PlayCount = song.PlayCount,
             };
 
             return songDto;
         }
 
-        public static UserDto toDto(this IUserProfile user)
+        public UserDto ToDto(IUserProfile user)
         {
             var userDto = new UserDto
             {
@@ -111,38 +122,51 @@ namespace LiStream.DtoHandler
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 Playlists = null,
-                FollowedPlayableCollections = user.FollowedPlayableCollections.Select(p => PlayableCollectionDto(p)).ToList()
+                FollowedPlayableCollections = user.FollowedPlayableCollections is not null ? user.FollowedPlayableCollections.Select(p => ToDto(p)).ToList() : null
             };
 
             return userDto;
         }
 
-        public static IPlayableCollection toPlayableCollection( this PlayableCollectionDto playableCollectionDto)
+        public IPlayableCollection ToPlayableCollection(PlayableCollectionDto playableCollectionDto)
         {
             if (playableCollectionDto.Playlist is not null)
             {
-                return new Playlist(playableCollectionDto.Id, playableCollectionDto.Playlist.Name, toUser(playableCollectionDto.Playlist.Owner), playableCollectionDto.Playlist.CreationDate, null);
+                return ToPlaylist(playableCollectionDto.Playlist);
             }
 
-            return new Album(playableCollectionDto.Id, playableCollectionDto.Album.Name, playableCollectionDto.Album.ReleaseDate, toArtist(playableCollectionDto.Album.Artist), null);
+            return ToAlbum(playableCollectionDto.Album);
         }
 
 
-        public static IPlaylist toPlaylist(this PlaylistDto playlistDto)
+        public IPlaylist ToPlaylist(PlaylistDto playlistDto)
         {
-            throw new NotImplementedException();
+            var owner = playlistDto.Owner is not null ? ToUser(playlistDto.Owner) : null;
+            var playables = playlistDto.Playables?.Select(x => ToSong(x)).ToList<IPlayable>();
+
+
+            var playlist = new Playlist(playlistDto.Id, playlistDto.Name, owner, playlistDto.CreationDate, playables);
+
+            return playlist;
         }
 
-        public static ISong toSong(this SongDto songDto)
+        public ISong ToSong(SongDto songDto)
         {
-            var song = new Song(songDto.Id, songDto.Data, songDto.Name, toArtist(songDto.Artist), toAlbum(songDto.Album), songDto.ReleaseDate, null, songDto.PlayCount, songDto.Lenght);
+            var artist = songDto.Artist is not null ? ToArtist(songDto.Artist) : null;
+            var album = songDto.Album is not null ? ToAlbum(songDto.Album) : null;
+
+            var song = new Song(songDto.Id, songDto.Data, songDto.Name, artist, album, songDto.ReleaseDate, null, songDto.PlayCount, songDto.Lenght);
 
             return song;
         }
 
-        public static IUserProfile toUser(this UserDto userDto)
+        public IUserProfile ToUser(UserDto userDto)
         {
-            var user = new User.User(userDto.Id, null, null, null, userDto.DisplayName, userDto.Email);
+            var favPlayables = userDto.FavoritePlayables?.Select(x => ToSong(x)).ToList<IPlayable>();
+            //var followedCollections = userDto.FollowedPlayableCollections?.Select(x => ToPlayableCollection(x)).ToList();
+            var playlists = userDto.Playlists?.Select(x => ToPlaylist(x)).ToList();
+
+            var user = new User.User(userDto.Id, favPlayables, null, playlists, userDto.DisplayName, userDto.Email);
 
             return user;
         }

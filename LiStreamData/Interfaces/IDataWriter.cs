@@ -1,14 +1,11 @@
-﻿using LiStream.Playables.Interfaces;
-using LiStream.User;
-using LiStream.User.Interfaces.Profile;
-using LiStreamData.DTO;
+﻿using LiStreamData.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiStream.DataHandler.Interfaces
+namespace LiStreamData.Interfaces
 {
     public interface IDataWriter
     {
@@ -24,7 +21,7 @@ namespace LiStream.DataHandler.Interfaces
         bool InsertSongFeature(Guid songID, Guid artistID);
 
         bool UpdateArtist(ArtistDto artist);
-        bool UpdateUser(UserDto user);
+        bool UpdateUserProfile(UserDto user);
         bool UpdateAlbum(AlbumDto album);
         bool UpdatePlaylist(PlaylistDto playlist);
         bool UpdateSong(SongDto song);

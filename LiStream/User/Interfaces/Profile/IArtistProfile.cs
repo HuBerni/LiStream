@@ -10,8 +10,8 @@ namespace LiStream.User.Interfaces.Profile
 {
     public interface IArtistProfile : IProfile, IEvaluateable<IArtistProfile>
     {
-        List<IAlbum>? Albums { get; }
-        List<IPlayable>? Singles { get; }
+        IList<IAlbum>? Albums { get; }
+        IList<IPlayable>? Singles { get; }
         string? Bio { get; }
     }
 }
