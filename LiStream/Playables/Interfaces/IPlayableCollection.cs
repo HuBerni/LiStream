@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LiStream.Interfaces;
 
 namespace LiStream.Playables.Interfaces
 {
-    public interface IPlayableCollection : IEvaluateable<IPlayableCollection>
+    public interface IPlayableCollection
     {
         Guid Id { get; }
         string Name { get; }

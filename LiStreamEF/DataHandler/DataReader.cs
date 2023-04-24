@@ -33,9 +33,11 @@ namespace LiStreamEF
         public IList<AlbumDto> GetArtistAlbums(Guid artistID)
         {
             var albums = _context.Albums
+                .Include(a => a.ArtistNavigation)
+                .Include(s => s.Songs)
                 .Where(a => a.Artist.Equals(artistID)).ToList();
 
-            return albums.Select(x => x.ToAlbumDto()).ToList();
+            return albums.Select(x => x.ToAlbumDto(true, true)).ToList();
         }
 
         public ArtistDto GetArtistProfile(Guid artistID)
@@ -48,16 +50,43 @@ namespace LiStreamEF
             return artist.ToArtistDto(true, true);
         }
 
+        public IList<ArtistDto> GetArtistProfiles()
+        {
+            var artists = _context.Artists
+                .Include(a => a.Albums)
+                .Include(s => s.SongsNavigation)
+                .ToList();
+
+            return artists.ToArtistDto(true, true);
+        }
+
         public IList<SongDto> GetFavoriteSongs(Guid userID)
         {
             var favSongs = _context.UserFavoriteSongs
                 .Include(x => x.Song)
-                .Where(u => u.User.Equals(userID)).ToList();
+                .ThenInclude(x => x.Album)
+                .Include(x => x.Song.Artist)
+                .Where(u => u.UserId.Equals(userID)).ToList();
 
-            return favSongs.Select(x => x.Song.ToSongDto()).ToList();
+            return favSongs.Select(x => x.Song.ToSongDto(true, true)).ToList();
         }
 
         public IList<PlayableCollectionDto> GetFollowedCollections(Guid userID)
+        {
+            var followedCollections = _context.UserFollowedPlayableCollections
+                .Include(x => x.User)
+                .Include(x => x.Playlist)
+                .Include(x => x.Playlist.PlaylistItems)
+                .ThenInclude(x => x.Song)
+                .ThenInclude(x => x.Album)
+                .Include(x => x.Album)
+                .ThenInclude(x => x.Songs)
+                .Where(u => u.UserId.Equals(userID)).ToList();
+
+            return followedCollections.ToPlayableCollectionDto(true, true);
+        }
+
+        public IList<PlayableCollectionDto> GetPlayableCollections()
         {
             throw new NotImplementedException();
         }
@@ -84,11 +113,26 @@ namespace LiStreamEF
             return song.ToSongDto(true, true);
         }
 
+        public IList<SongDto> GetSongs()
+        {
+            var songs = _context.Songs
+                .Include(x => x.Artist)
+                .Include(x => x.Artists)
+                .Include(x => x.Album)
+                .ToList();
+
+            return songs.ToSongDto(true, true);
+        }
+
         public IList<PlaylistDto> GetUserPlaylists(Guid userID)
         {
-            var playlists = _context.Playlists.Where(p => p.Owner.Equals(userID)).ToList();
+            var playlists = _context.Playlists
+                .Include(x => x.OwnerNavigation)
+                .Include(x => x.PlaylistItems)
+                .ThenInclude(x => x.Song)
+                .Where(p => p.Owner.Equals(userID)).ToList();
 
-            return playlists.Select(x => x.ToPlaylistDto()).ToList();
+            return playlists.Select(x => x.ToPlaylistDto(true, true)).ToList();
         }
 
         public UserDto GetUserProfile(Guid userID)

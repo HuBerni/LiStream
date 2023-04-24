@@ -30,15 +30,5 @@ namespace LiStream.User
             DisplayName = displayName;
             Email = email;
         }
-
-        public IArtistProfile getSimilar()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IArtistProfile> getSimilarList()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

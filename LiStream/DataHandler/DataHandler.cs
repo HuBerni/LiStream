@@ -1,5 +1,6 @@
 ﻿using LiStream.DataHandler.Interfaces;
 using LiStream.DtoHandler;
+using LiStream.Evaluator.Interfaces;
 using LiStream.Playables.Interfaces;
 using LiStream.User;
 using LiStream.User.Interfaces;
@@ -20,37 +21,49 @@ namespace LiStream.DataHandler
         private readonly IDataWriter _writer;
         private readonly IDataReader _reader;
         private readonly IDtoHandler _dtoHandler;
+        private readonly IEvaluator _evaluator;
 
-        public DataHandler(IDataWriter writer, IDataReader reader, IDtoHandler dtoHandler)
+        public DataHandler(IDataWriter writer, IDataReader reader, IDtoHandler dtoHandler, IEvaluator evaluator)
         {
             _writer = writer;
             _reader = reader;
             _dtoHandler = dtoHandler;
+            _evaluator = evaluator;
         }
 
-        public IAlbum GetAlbum(Guid id)
+        public IAlbum GetAlbum(Guid albumID)
         {
-            return _dtoHandler.ToAlbum(_reader.GetAlbum(id));
+            return _dtoHandler.ToAlbum(_reader.GetAlbum(albumID));
         }
 
-        public IArtistProfile GetArtistProfile(Guid id)
+        public IArtistProfile GetArtistProfile(Guid artistID)
         {
-            return _dtoHandler.ToArtist(_reader.GetArtistProfile(id));
+            return _dtoHandler.ToArtist(_reader.GetArtistProfile(artistID));
         }
 
-        public IPlaylist GetPlaylist(Guid id)
+        public IList<IArtistProfile> GetArtistProfiles()
         {
-            return _dtoHandler.ToPlaylist(_reader.GetPlaylist(id));
+            return _reader.GetArtistProfiles().Select(x => _dtoHandler.ToArtist(x)).ToList();
         }
 
-        public IUserProfile GetUserProfile(Guid id)
+        public IPlaylist GetPlaylist(Guid playlistID)
         {
-            return _dtoHandler.ToUser(_reader.GetUserProfile(id));
+            return _dtoHandler.ToPlaylist(_reader.GetPlaylist(playlistID));
         }
 
-        public ISong GetSong(Guid id)
+        public IUserProfile GetUserProfile(Guid userID)
         {
-            return _dtoHandler.ToSong(_reader.GetSong(id));
+            return _dtoHandler.ToUser(_reader.GetUserProfile(userID));
+        }
+
+        public ISong GetSong(Guid songID)
+        {
+            return _dtoHandler.ToSong(_reader.GetSong(songID));
+        }
+
+        public IList<ISong> GetSongs()
+        {
+            return _reader.GetSongs().Select(x => _dtoHandler.ToSong(x)).ToList();
         }
 
         public bool InsertArtist(ArtistDto artist)
@@ -176,6 +189,61 @@ namespace LiStream.DataHandler
         public bool DeletePlayableCollectionFromUserFollowed(Guid playlistalbumID, Guid userID)
         {
             return _writer.DeletePlayableCollectionFromUserFollowed(playlistalbumID, userID);
+        }
+
+        public IList<IAlbum> GetArtistAlbums(Guid artistID)
+        {
+            return _reader.GetArtistAlbums(artistID).Select(x => _dtoHandler.ToAlbum(x)).ToList();
+        }
+
+        public IList<IPlaylist> GetUserPlaylists(Guid userID)
+        {
+            return _reader.GetUserPlaylists(userID).Select(x => _dtoHandler.ToPlaylist(x)).ToList();
+        }
+
+        public IList<ISong> GetFavoriteSongs(Guid userID)
+        {
+            return _reader.GetFavoriteSongs(userID).Select(x => _dtoHandler.ToSong(x)).ToList();
+        }
+
+        public IList<IPlayableCollection> GetFollowedCollections(Guid userID)
+        {
+            return _reader.GetFollowedCollections(userID).Select(x => _dtoHandler.ToPlayableCollection(x)).ToList();
+        }
+
+        public IList<IPlayableCollection> GetPlayableCollections()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISong GetSimilar(ISong song)
+        {
+            return _evaluator.GetSimilar(song, GetSongs());
+        }
+
+        public IList<ISong> GetSimilarList(ISong song)
+        {
+            return _evaluator.GetSimilarList(song, GetSongs());
+        }
+
+        public IArtistProfile GetSimilar(IArtistProfile artist)
+        {
+            return _evaluator.GetSimilar(artist, GetArtistProfiles());
+        }
+
+        public IList<IArtistProfile> GetSimilarList(IArtistProfile artist)
+        {
+            return _evaluator.GetSimilarList(artist, GetArtistProfiles());
+        }
+
+        public IPlayableCollection GetSimilar(IPlayableCollection collection)
+        {
+            return _evaluator.GetSimilar(collection, GetPlayableCollections());
+        }
+
+        public IList<IPlayableCollection> GetSimilarList(IPlayableCollection collection)
+        {
+            return _evaluator.GetSimilarList(collection, GetPlayableCollections());
         }
     }
 }

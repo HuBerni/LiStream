@@ -17,16 +17,16 @@ namespace LiStreamEF.DTO
 
             if (mapAlbumOrPlaylist)
             {
-                playableCollection.Playlist?.ToPlaylistDto();
-                playableCollection.Album?.ToAlbumDto();
+                playableCollectionDto.Playlist = playableCollection.Playlist?.ToPlaylistDto(true, true);
+                playableCollectionDto.Album =  playableCollection.Album?.ToAlbumDto(true , true);
             }
 
             return playableCollectionDto;
         }
 
-        public static IList<PlayableCollectionDto> ToPlayableCollectionDto(this ICollection<UserFollowedPlayableCollection> playableCollections)
+        public static IList<PlayableCollectionDto> ToPlayableCollectionDto(this ICollection<UserFollowedPlayableCollection> playableCollections, bool mapUser = false, bool mapAlbumOrPlaylist = false)
         {
-            return playableCollections.Select(x => x.ToPlayableCollectionDto()).ToList();
+            return playableCollections.Select(x => x.ToPlayableCollectionDto(mapUser, mapAlbumOrPlaylist)).ToList();
         }
     }
 }

@@ -28,17 +28,6 @@ namespace LiStream.Playables
             Artist = artist;
             Playables = playables;
         }
-
-        public IPlayableCollection getSimilar()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IPlayableCollection> getSimilarList()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Next()
         {
             throw new NotImplementedException();

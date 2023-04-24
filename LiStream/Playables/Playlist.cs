@@ -35,16 +35,6 @@ namespace LiStream.Playables
             throw new NotImplementedException();
         }
 
-        public IPlayableCollection getSimilar()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IPlayableCollection> getSimilarList()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Next()
         {
             throw new NotImplementedException();

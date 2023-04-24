@@ -295,12 +295,16 @@ namespace LiStreamEF
                 {
                     SongId = Guid.NewGuid(),
                     Title = song.Name,
+                    Data = song.Data,
                     ReleaseDate = DateTime.Now,
                     Lenght = (int)song.Lenght.TotalSeconds,
                     ArtistId = song.Artist.Id,
-                    AlbumId = song.Album.Id,
+                    AlbumId = song.Album?.Id,
                     PlayCount = 0
                 };
+
+                _context.Songs.Add(s);
+                _context.SaveChanges();
             }
             catch (Exception)
             {

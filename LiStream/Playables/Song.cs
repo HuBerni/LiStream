@@ -41,16 +41,6 @@ namespace LiStream.Playables
             Lenght = lenght;
         }
 
-        public IPlayable getSimilar()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IPlayable> getSimilarList()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Pause()
         {
             throw new NotImplementedException();
