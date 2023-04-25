@@ -210,6 +210,15 @@ namespace LiStream.DataHandler
         {
             return _reader.GetFollowedCollections(userID).Select(x => _dtoHandler.ToPlayableCollection(x)).ToList();
         }
+        public IList<IAlbum> GetAlbums()
+        {
+            return _reader.GetAlbums().Select(x => _dtoHandler.ToAlbum(x)).ToList();
+        }
+
+        public IList<IPlaylist> GetPlaylists()
+        {
+            return _reader.GetPlaylists().Select(x => _dtoHandler.ToPlaylist(x)).ToList();
+        }
 
         public IList<IPlayableCollection> GetPlayableCollections()
         {

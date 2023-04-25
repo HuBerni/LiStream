@@ -23,9 +23,9 @@ namespace LiStreamEF.DTO
             return albumDto;
         }
 
-        public static IList<AlbumDto> ToAlbumDto(this ICollection<Album> albums)
+        public static IList<AlbumDto> ToAlbumDto(this ICollection<Album> albums, bool mapArtist = false, bool mapPlayables = false)
         {
-            return albums.Select(x => x.ToAlbumDto()).ToList();
+            return albums.Select(x => x.ToAlbumDto(mapArtist, mapPlayables)).ToList();
         }
     }
 }

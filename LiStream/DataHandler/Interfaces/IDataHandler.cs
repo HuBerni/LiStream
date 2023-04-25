@@ -7,10 +7,12 @@ namespace LiStream.DataHandler.Interfaces
     public interface IDataHandler
     {
         IAlbum GetAlbum(Guid albumID);
+        IList<IAlbum> GetAlbums();
         IList<IAlbum> GetArtistAlbums(Guid artistID);
         IArtistProfile GetArtistProfile(Guid artistID);
         IList<IArtistProfile> GetArtistProfiles();
         IPlaylist GetPlaylist(Guid playlistID);
+        IList<IPlaylist> GetPlaylists();
         IList<IPlaylist> GetUserPlaylists(Guid userID);
         ISong GetSong(Guid songID);
         IList<ISong> GetSongs();

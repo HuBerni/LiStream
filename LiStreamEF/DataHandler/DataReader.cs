@@ -30,6 +30,16 @@ namespace LiStreamEF
             return album.ToAlbumDto(true, true);
         }
 
+        public IList<AlbumDto> GetAlbums()
+        {
+            var albums = _context.Albums
+                .Include(a => a.ArtistNavigation)
+                .Include(s => s.Songs)
+                .ToList();
+
+            return albums.ToAlbumDto(true, true);
+        }
+
         public IList<AlbumDto> GetArtistAlbums(Guid artistID)
         {
             var albums = _context.Albums
@@ -86,11 +96,6 @@ namespace LiStreamEF
             return followedCollections.ToPlayableCollectionDto(true, true);
         }
 
-        public IList<PlayableCollectionDto> GetPlayableCollections()
-        {
-            throw new NotImplementedException();
-        }
-
         public PlaylistDto GetPlaylist(Guid playlistID)
         {
             var playlist = _context.Playlists
@@ -100,6 +105,17 @@ namespace LiStreamEF
                 .FirstOrDefault(p => p.PlaylistId.Equals(playlistID));
             
             return playlist.ToPlaylistDto(true, true);
+        }
+
+        public IList<PlaylistDto> GetPlaylists()
+        {
+            var playlists = _context.Playlists
+                .Include(x => x.OwnerNavigation)
+                .Include(x => x.PlaylistItems)
+                .ThenInclude(x => x.Song)
+                .ToList();
+
+            return playlists.ToPlaylistDto(true, true);
         }
 
         public SongDto GetSong(Guid songID)

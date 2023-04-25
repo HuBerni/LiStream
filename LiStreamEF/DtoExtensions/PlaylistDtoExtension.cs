@@ -23,9 +23,9 @@ namespace LiStreamEF.DTO
             return playlistDto;
         }
 
-        public static IList<PlaylistDto> ToPlaylistDto(this ICollection<Playlist> playlists)
+        public static IList<PlaylistDto> ToPlaylistDto(this ICollection<Playlist> playlists, bool mapOwner = false, bool mapPlayables = false)
         {
-            return playlists.Select(x => x.ToPlaylistDto()).ToList();
+            return playlists.Select(x => x.ToPlaylistDto(mapOwner, mapPlayables)).ToList();
         }
     }
 }
