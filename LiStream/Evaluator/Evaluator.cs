@@ -76,11 +76,12 @@ namespace LiStream.Evaluator
         private double sameBytesPercentage(byte[] data1, byte[] data2)
         {
             int sameBytes = 0;
+            int length = data1.Length > data2.Length ? data2.Length : data1.Length;
 
             if (data1 == data2)
                 return 1;
 
-            for (int i = 0; i < data1.Length; i++)
+            for (int i = 0; i < length; i++)
             {
                 if (data1[i] == data2[i])
                 {
