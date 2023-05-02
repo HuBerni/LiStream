@@ -28,6 +28,10 @@ namespace LiStream.Playables
 
         public TimeSpan Lenght { get; private set; }
 
+        public bool IsPlaying { get; private set; }
+
+        public TimeSpan CurrentPosition { get; private set; }
+
         public Song(Guid id, byte[] data, string title, IArtistProfile artist, IAlbum album, DateTime releaseDate, IList<IArtistProfile> features, long playCount, TimeSpan lenght)
         {
             Id = id;
@@ -43,17 +47,18 @@ namespace LiStream.Playables
 
         public void Pause()
         {
-            throw new NotImplementedException();
+            IsPlaying = false;
         }
 
         public void Play()
         {
-            throw new NotImplementedException();
+            IsPlaying = true;
         }
 
         public void Restart()
         {
-            throw new NotImplementedException();
+            CurrentPosition = TimeSpan.Zero;
+            IsPlaying = true;
         }
     }
 }

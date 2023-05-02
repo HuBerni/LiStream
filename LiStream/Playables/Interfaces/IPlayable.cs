@@ -12,6 +12,8 @@ namespace LiStream.Playables.Interfaces
         string Name { get; }
         DateTime ReleaseDate { get; }
         TimeSpan Lenght { get; }
+        bool IsPlaying { get; }
+        TimeSpan CurrentPosition { get; }
 
         void Play();
         void Pause();

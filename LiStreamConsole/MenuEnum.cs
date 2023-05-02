@@ -8,10 +8,23 @@ namespace LiStreamConsole
 {
     public enum MainMenuOptions
     {
-        Songs = 0,
-        Playlists = 1,
-        Artists = 2,
-        Albums = 3,
-        Exit = 4
+        Songs,
+        Playlists,
+        Artists,
+        Albums,
+        Exit,
+    }
+
+    public enum SongMenuOptions
+    {
+        Idle,
+        Play,
+        Pause,
+        Restart,
+        AddToPlaylist,
+        GoToArtist,
+        GetSimilar,
+        GoToAlbum,
+        GoBack
     }
 }

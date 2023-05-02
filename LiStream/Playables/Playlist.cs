@@ -21,6 +21,8 @@ namespace LiStream.Playables
 
         public IList<IPlayable>? Playables { get; private set; }
 
+        public int CurrentPlayableIndex { get; private set; }
+
         public Playlist(Guid id, string name, IUserProfile owner, DateTime creationDate, IList<IPlayable>? playables)
         {
             Id = id;
@@ -37,17 +39,32 @@ namespace LiStream.Playables
 
         public void Next()
         {
-            throw new NotImplementedException();
+            if (CurrentPlayableIndex == Playables.Count - 1)
+            {
+                CurrentPlayableIndex = 0;
+                return;
+            }
+
+            CurrentPlayableIndex++;
         }
 
-        public void PlayItem(IPlayable item)
+        public void PlayItem(int index)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > Playables.Count - 1)
+                    throw new IndexOutOfRangeException();
+
+            CurrentPlayableIndex = index;   
         }
 
         public void Previous()
         {
-            throw new NotImplementedException();
+            if (CurrentPlayableIndex == 0)
+            {
+                CurrentPlayableIndex = Playables.Count - 1;
+                return;
+            }
+
+            CurrentPlayableIndex--;
         }
 
         public void RemoveSong(ISong song)

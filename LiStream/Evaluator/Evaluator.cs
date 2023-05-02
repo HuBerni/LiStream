@@ -65,12 +65,13 @@ namespace LiStream.Evaluator
 
         public IArtistProfile GetSimilar(IArtistProfile artist, IList<IArtistProfile> toCompare)
         {
-            throw new NotImplementedException();
+            var rand = new Random();
+            return toCompare[rand.Next(0, toCompare.Count)];
         }
 
         public IList<IArtistProfile> GetSimilarList(IArtistProfile artist, IList<IArtistProfile> toCompare)
         {
-            throw new NotImplementedException();
+            return toCompare.OrderBy(x => Guid.NewGuid()).Take(3).ToList(); 
         }
 
         private double sameBytesPercentage(byte[] data1, byte[] data2)

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace LiStream.DataHandler
 {
-    public class DataHandler : IDataHandler, IDataWriter
+    public class DataHandler : IDataHandler
     {
         private readonly IDataWriter _writer;
         private readonly IDataReader _reader;
