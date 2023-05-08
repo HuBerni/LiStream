@@ -1,4 +1,6 @@
-﻿using LiStream.Playables.Interfaces;
+﻿using LiStream.Displayables;
+using LiStream.Displayables.Interfaces;
+using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LiStream.User
 {
-    public class Artist : IArtistProfile
+    public class Artist : IArtistProfile, IDisplayable
     {
         public Guid Id { get; protected set; }
         public IList<IAlbum>? Albums { get; protected set; }
@@ -29,6 +31,25 @@ namespace LiStream.User
             Bio = bio;
             DisplayName = displayName;
             Email = email;
+        }
+
+        public string GetDisplayableName()
+        {
+            return DisplayName;
+        }
+
+        public IList<DisplayableInformation> GetAdditionalInformation()
+        {
+            return new List<DisplayableInformation>()
+            {
+                new DisplayableInformation("Name", DisplayName),
+                new DisplayableInformation("Bio", Bio)
+            };
+        }
+
+        public bool IsPlaying()
+        {
+            throw new NotImplementedException();
         }
     }
 }

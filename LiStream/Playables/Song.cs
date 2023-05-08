@@ -1,4 +1,6 @@
-﻿using LiStream.Playables.Interfaces;
+﻿using LiStream.Displayables;
+using LiStream.Displayables.Interfaces;
+using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LiStream.Playables
 {
-    public class Song : ISong
+    public class Song : ISong, IDisplayable
     {
         public Guid Id { get; private set; }
 
@@ -59,6 +61,28 @@ namespace LiStream.Playables
         {
             CurrentPosition = TimeSpan.Zero;
             IsPlaying = true;
+        }
+
+        public string GetDisplayableName()
+        {
+            return Name;
+        }
+
+        public IList<DisplayableInformation> GetAdditionalInformation()
+        {
+            return new List<DisplayableInformation>()
+            {
+                new DisplayableInformation("Title", Name),
+                new DisplayableInformation("Artist", Artist.DisplayName),
+                new DisplayableInformation("Album", Album?.Name ?? ""),
+                new DisplayableInformation("Release Date", ReleaseDate.ToShortDateString()),
+                new DisplayableInformation("Length", Lenght.ToString())
+            };  
+        }
+
+        bool IDisplayable.IsPlaying()
+        {
+            return IsPlaying;
         }
     }
 }

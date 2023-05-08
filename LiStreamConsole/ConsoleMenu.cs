@@ -1,6 +1,7 @@
 ﻿using LiStream.Commands;
 using LiStream.Commands.Interfaces;
 using LiStream.DataHandler.Interfaces;
+using LiStream.Displayables;
 using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces;
 using LiStream.User.Interfaces.Profile;
@@ -30,14 +31,12 @@ public class ConsoleMenu
 
     private ColState _colState;
     private IDataHandler _dataHandler;
-    private IInvoker _invoker;
 
-    public ConsoleMenu(IDataHandler datahandler, IInvoker invoker)
+    public ConsoleMenu(IDataHandler datahandler)
     {
         _dataHandler = datahandler;
         Console.CursorVisible = false;
         _colState = ColState.Middle;
-        _invoker = invoker;
     }
 
     public void MainMenu()
@@ -214,7 +213,7 @@ public class ConsoleMenu
             switch (_middleOptions[_selectedMiddleIndex])
             {
                 case "Restart":
-                    _invoker.ExecuteCommand(new RestartCommand(song));
+                    song.Restart();
                     return SongMenuOptions.Restart;
                 case "Add to Playlist":
                     return SongMenuOptions.AddToPlaylist;

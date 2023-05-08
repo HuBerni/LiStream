@@ -1,4 +1,6 @@
-﻿using LiStream.Playables.Interfaces;
+﻿using LiStream.Displayables;
+using LiStream.Displayables.Interfaces;
+using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using System;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LiStream.Playables
 {
-    public class Playlist : IPlaylist
+    public class Playlist : IPlaylist, IDisplayable
     {
         public Guid Id { get; private set; }
 
@@ -68,6 +70,26 @@ namespace LiStream.Playables
         }
 
         public void RemoveSong(ISong song)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDisplayableName()
+        {
+            return Name;
+        }
+
+        public IList<DisplayableInformation> GetAdditionalInformation()
+        {
+            return new List<DisplayableInformation>
+            {
+                new DisplayableInformation("Name", Name),
+                new DisplayableInformation("Owner", Owner.DisplayName),
+                new DisplayableInformation("Creation Date", CreationDate.ToShortDateString())
+            };
+        }
+
+        public bool IsPlaying()
         {
             throw new NotImplementedException();
         }
