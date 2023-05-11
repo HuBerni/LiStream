@@ -6,7 +6,7 @@ namespace LiStreamConsole.Navigation.Interfaces
     public interface IPageNavigator
     {
         
-        MainMenuOptions GetNavigationOption(IDisplayablePage page, ICursorNavigator cursorNavigator);
-        IDisplayablePage GetPageToNavigateTo(IDisplayablePage page, MainMenuOptions menuOption);
+        MenuOptions GetNavigationOption(IDisplayablePage page, ICursorNavigator cursorNavigator);
+        IDisplayablePage GetPageToNavigateTo(IDisplayablePage page, MenuOptions menuOption);
     }
 }

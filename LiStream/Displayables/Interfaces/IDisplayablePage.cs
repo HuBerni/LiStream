@@ -6,12 +6,12 @@ namespace LiStream.Displayables.Interfaces
     public interface IDisplayablePage
     {
         int GetColumns();
-        int GetColunsForItem(int index);
+        int GetColumsForItem(int index);
         int GetRows();
         void Display();
         IList<IDisplayable> GetDisplayables();
         void SetDisplayables(IList<IDisplayable> displayables);
-        MainMenuOptions GetSelectedMenuOption();
+        MenuOptions GetSelectedMenuOption();
         IDisplayablePage GetNavigateBackPage();
     }
 }

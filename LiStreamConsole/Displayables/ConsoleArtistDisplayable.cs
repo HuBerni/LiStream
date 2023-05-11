@@ -1,5 +1,6 @@
 ﻿using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
+using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
 
 namespace LiStreamConsole.Displayables
@@ -45,7 +46,7 @@ namespace LiStreamConsole.Displayables
             return 2;
         }
 
-        public int GetColunsForItem(int index)
+        public int GetColumsForItem(int index)
         {
             if (_displayables[index].GetAdditionalInformation().Count > 0)
             {
@@ -62,17 +63,20 @@ namespace LiStreamConsole.Displayables
 
         public IDisplayablePage GetNavigateBackPage()
         {
-            return PageNavigator.GetPageToNavigateTo(this, MainMenuOptions.Back);
+            return PageNavigator.GetPageToNavigateTo(this, MenuOptions.Back);
         }
 
         public int GetRows()
         {
-            return _displayables.Count;
+            if (CursorNavigator.GetCursorColumn() == CursorColumn.Left)
+                return _displayables.Count;
+
+            return _displayables[0].GetAdditionalInformation().Count - 1;
         }
 
-        public MainMenuOptions GetSelectedMenuOption()
+        public MenuOptions GetSelectedMenuOption()
         {
-            return CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count ? MainMenuOptions.Back : MainMenuOptions.StayCurrent;
+            return CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count ? MenuOptions.Back : MenuOptions.StayCurrent;
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)

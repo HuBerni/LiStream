@@ -40,6 +40,18 @@ namespace LiStreamEF
             return albums.ToAlbumDto(true, true);
         }
 
+        public IList<SongDto> GetAlbumSongs(Guid albumID)
+        {
+            var songs = _context.Songs
+                .Include(x => x.Artist)
+                .Include(x => x.Artists)
+                .Include(x => x.Album)
+                .Where(x => x.AlbumId.Equals(albumID))
+                .ToList();
+
+            return songs.Select(x => x.ToSongDto(true, true)).ToList();
+        }
+
         public IList<AlbumDto> GetArtistAlbums(Guid artistID)
         {
             var albums = _context.Albums
@@ -116,6 +128,21 @@ namespace LiStreamEF
                 .ToList();
 
             return playlists.ToPlaylistDto(true, true);
+        }
+
+        public IList<SongDto> GetPlaylistSongs(Guid playlistID)
+        {
+            var songs = _context.Songs
+                .Include(x => x.Artist)
+                .Include(x => x.Artists)
+                .Include(x => x.Album)
+                .Where(x => _context.PlaylistItems
+                    .Where(p => p.PlaylistId.Equals(playlistID))
+                    .Select(p => p.SongId)
+                    .Contains(x.SongId))
+                .ToList();
+
+            return songs.ToSongDto(true, true);
         }
 
         public SongDto GetSong(Guid songID)

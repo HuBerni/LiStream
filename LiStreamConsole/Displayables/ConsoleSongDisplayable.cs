@@ -1,5 +1,8 @@
-﻿using LiStream.Displayables;
+﻿using LiStream.Commands;
+using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
+using LiStream.Playables.Interfaces;
+using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
 
 namespace LiStreamConsole.Displayables
@@ -19,20 +22,24 @@ namespace LiStreamConsole.Displayables
 
             foreach (var item in _displayables)
             {
+                if (item.IsPlaying())
+                { 
+                    names.Add($">> {item.GetDisplayableName()}");
+                    continue;
+                }
+                  
                 names.Add(item.GetDisplayableName());
             }
 
             PrintLeftMenu(names, "Songs");
-            if (CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count)
+            if (CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count)
                 return;
 
-            if (_displayables[CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left)]?.GetAdditionalInformation().Count > 0)
+            if (_displayables[CursorNavigator.GetCursorRowForColumn(CursorColumn.Left)]?.GetAdditionalInformation().Count > 0)
             {
                 List<string> additinalInfo = new();
 
-
-
-                foreach (var item in _displayables[CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left)].GetAdditionalInformation())
+                foreach (var item in _displayables[CursorNavigator.GetCursorRowForColumn(CursorColumn.Left)].GetAdditionalInformation())
                 {
                     additinalInfo.Add($"{item.Header}: {item.Information}");
                 }
@@ -46,7 +53,7 @@ namespace LiStreamConsole.Displayables
             return 2;
         }
 
-        public int GetColunsForItem(int index)
+        public int GetColumsForItem(int index)
         {
             if (_displayables[index].GetAdditionalInformation().Count > 0)
             {
@@ -63,17 +70,20 @@ namespace LiStreamConsole.Displayables
 
         public IDisplayablePage GetNavigateBackPage()
         {
-            return PageNavigator.GetPageToNavigateTo(this, MainMenuOptions.Back);
+            return PageNavigator.GetPageToNavigateTo(this, MenuOptions.Back);
         }
 
         public int GetRows()
         {
-            return _displayables.Count;
+            if(CursorNavigator.GetCursorColumn() == CursorColumn.Left)
+                return _displayables.Count;
+
+            return _displayables[0].GetAdditionalInformation().Count - 1;
         }
 
-        public MainMenuOptions GetSelectedMenuOption()
+        public MenuOptions GetSelectedMenuOption()
         {
-            return CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count ? MainMenuOptions.Back : MainMenuOptions.StayCurrent; 
+            return CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count ? MenuOptions.Back : MenuOptions.StayCurrent; 
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)

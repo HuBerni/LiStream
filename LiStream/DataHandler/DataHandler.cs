@@ -254,5 +254,15 @@ namespace LiStream.DataHandler
         {
             return _evaluator.GetSimilarList(collection, GetPlayableCollections());
         }
+
+        public IList<ISong> GetPlaylistSongs(Guid playlistID)
+        {
+            return _reader.GetPlaylistSongs(playlistID).Select(x => _dtoHandler.ToSong(x)).ToList();
+        }
+
+        public IList<ISong> GetAlbumSongs(Guid albumID)
+        {
+            return _reader.GetAlbumSongs(albumID).Select(x => _dtoHandler.ToSong(x)).ToList();
+        }
     }
 }

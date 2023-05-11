@@ -25,5 +25,8 @@ namespace LiStreamData.Interfaces
         IList<PlaylistDto> GetUserPlaylists(Guid userID);
         IList<PlayableCollectionDto> GetFollowedCollections(Guid userID);
         IList<AlbumDto> GetArtistAlbums(Guid aristID);
+
+        IList<SongDto> GetPlaylistSongs(Guid playlistID);
+        IList<SongDto> GetAlbumSongs(Guid albumID);
     }
 }

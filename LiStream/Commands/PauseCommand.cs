@@ -12,6 +12,11 @@ namespace LiStream.Commands
     {
         private readonly IPlayable _playable;
 
+        public PauseCommand(IPlayable playable)
+        {
+            _playable = playable;
+        }
+
         public void Execute()
         {
             _playable.Pause();

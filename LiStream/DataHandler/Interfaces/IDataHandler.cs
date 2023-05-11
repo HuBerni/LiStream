@@ -36,6 +36,8 @@ namespace LiStream.DataHandler.Interfaces
         IList<ISong> GetSongs();
         IList<IPlaylist> GetUserPlaylists(Guid userID);
         IUserProfile GetUserProfile(Guid userID);
+        IList<ISong> GetPlaylistSongs(Guid playlistID);
+        IList<ISong> GetAlbumSongs(Guid albumID);
         bool InsertAlbum(AlbumDto album);
         bool InsertArtist(ArtistDto artist);
         bool InsertPlayableCollectionToUserFollowed(Guid playlistalbumID, Guid userID);

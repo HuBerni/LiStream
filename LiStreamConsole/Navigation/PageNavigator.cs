@@ -1,6 +1,7 @@
 ﻿using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStreamConsole.Navigation.Interfaces;
+using System.Runtime.CompilerServices;
 
 namespace LiStreamConsole.Navigation
 {
@@ -13,14 +14,14 @@ namespace LiStreamConsole.Navigation
             _backMap = backMap;
         }
 
-        public MainMenuOptions GetNavigationOption(IDisplayablePage page, ICursorNavigator cursorNavigator)
+        public MenuOptions GetNavigationOption(IDisplayablePage page, ICursorNavigator cursorNavigator)
         {
             return page.GetSelectedMenuOption();
         }
 
-        public IDisplayablePage GetPageToNavigateTo(IDisplayablePage page, MainMenuOptions menuOption)
+        public IDisplayablePage GetPageToNavigateTo(IDisplayablePage page, MenuOptions menuOption)
         {
-            if (menuOption == MainMenuOptions.Back)
+            if (menuOption == MenuOptions.Back)
             {
                 return _backMap[page];
             }

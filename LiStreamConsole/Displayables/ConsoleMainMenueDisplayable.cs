@@ -10,7 +10,7 @@ namespace LiStreamConsole.Displayables
     public class ConsoleMainMenuDisplayable : ConsoleDisplayable, IDisplayablePage
     {
         private List<string> _mainMenuOptions = new List<string>();
-        private Dictionary<int, MainMenuOptions> _mainMenuActions = new Dictionary<int, MainMenuOptions>();
+        private Dictionary<int, MenuOptions> _mainMenuActions = new Dictionary<int, MenuOptions>();
         
 
         public ConsoleMainMenuDisplayable(ICursorNavigator cursorNavigator, IPageNavigator pageNavigator) : base(cursorNavigator, pageNavigator)
@@ -21,25 +21,25 @@ namespace LiStreamConsole.Displayables
             _mainMenuOptions.Add("Albums");
             _mainMenuOptions.Add("Exit");
 
-            _mainMenuActions.Add(0, MainMenuOptions.Songs);
-            _mainMenuActions.Add(1, MainMenuOptions.Playlists);
-            _mainMenuActions.Add(2, MainMenuOptions.Artists);
-            _mainMenuActions.Add(3, MainMenuOptions.Albums);
-            _mainMenuActions.Add(4, MainMenuOptions.Exit);
+            _mainMenuActions.Add(0, MenuOptions.Songs);
+            _mainMenuActions.Add(1, MenuOptions.Playlists);
+            _mainMenuActions.Add(2, MenuOptions.Artists);
+            _mainMenuActions.Add(3, MenuOptions.Albums);
+            _mainMenuActions.Add(4, MenuOptions.Exit);
         }
 
         public void Display()
         {
-            CursorNavigator.SetCursorColumn(Navigation.CursorColumn.Middle);
+            CursorNavigator.SetCursorColumn(CursorColumn.Middle);
             PrintMiddleMenu(_mainMenuOptions, "Main Menu");
         }
 
         public int GetColumns()
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
-        public int GetColunsForItem(int index)
+        public int GetColumsForItem(int index)
         {
 
             return 1;
@@ -52,7 +52,7 @@ namespace LiStreamConsole.Displayables
 
         public IDisplayablePage GetNavigateBackPage()
         {
-            return PageNavigator.GetPageToNavigateTo(this, MainMenuOptions.Back);
+            return PageNavigator.GetPageToNavigateTo(this, MenuOptions.Back);
         }
 
         public int GetRows()
@@ -60,9 +60,9 @@ namespace LiStreamConsole.Displayables
             return _mainMenuOptions.Count;
         }
 
-        public MainMenuOptions GetSelectedMenuOption()
+        public MenuOptions GetSelectedMenuOption()
         {
-            return _mainMenuActions[CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Middle)];
+            return _mainMenuActions[CursorNavigator.GetCursorRowForColumn(CursorColumn.Middle)];
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)
