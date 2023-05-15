@@ -11,7 +11,7 @@ namespace LiStream.Displayables.Interfaces
         void Display();
         IList<IDisplayable> GetDisplayables();
         void SetDisplayables(IList<IDisplayable> displayables);
-        MenuOptions GetSelectedMenuOption();
+        MenuOption GetSelectedMenuOption();
         IDisplayablePage GetNavigateBackPage();
     }
 }

@@ -8,8 +8,8 @@ namespace LiStream.Displayables.Interfaces
 {
     public interface IDisplayableDataRetriever
     {
-        IList<IDisplayable> GetDisplayables(MenuOptions option);
-        IList<IDisplayable> GetDisplayables(MenuOptions option, IDisplayable displayable);
-        IList<IDisplayable> GetSimilar(IDisplayable displayable);
+        IList<IDisplayable> GetDisplayables(MenuOption option);
+        IList<IDisplayable> GetDisplayables(MenuOption option, IDisplayable displayable);
+        IList<IDisplayable> GetSimilar(MenuOption option, IDisplayable displayable);
     }
 }

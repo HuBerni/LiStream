@@ -3,19 +3,19 @@ using LiStream.Displayables.Interfaces;
 
 namespace LiStream.Displayables
 {
-    public class DisplayableManger : IDisplayableManger
+    public class DisplayableManger : IDisplayableManager
     {
-        private IDictionary<MenuOptions, IDisplayablePage> _pageMap;
+        private IDictionary<MenuOption, IDisplayablePage> _pageMap;
 
-        public DisplayableManger(IDictionary<MenuOptions, IDisplayablePage> pageMap, IDataHandler dataHandler)
+        public DisplayableManger(IDictionary<MenuOption, IDisplayablePage> pageMap, IDataHandler dataHandler)
         {
             _pageMap = pageMap;
         }
 
 
-        public IDisplayablePage GetDisplayablePage(IDisplayablePage page, MenuOptions option)
+        public IDisplayablePage GetDisplayablePage(IDisplayablePage page, MenuOption option)
         {
-            if(option == MenuOptions.Back)
+            if(option == MenuOption.Back)
                 return page.GetNavigateBackPage();
 
             page = _pageMap[option];
@@ -23,7 +23,7 @@ namespace LiStream.Displayables
             return page;
         }
 
-        public MenuOptions GetPageMenuOption(IDisplayablePage page)
+        public MenuOption GetPageMenuOption(IDisplayablePage page)
         {
             foreach (var item in _pageMap)
             {
@@ -31,7 +31,7 @@ namespace LiStream.Displayables
                     return item.Key;
             }
 
-            return MenuOptions.StayCurrent;
+            return MenuOption.StayCurrent;
         }
     }
 }

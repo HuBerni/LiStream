@@ -1,4 +1,5 @@
 ﻿using LiStream.Commands;
+using LiStream.Commands.Interfaces;
 using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStream.Playables.Interfaces;
@@ -10,10 +11,17 @@ namespace LiStreamConsole.Displayables
     public class ConsoleSongDisplayable : ConsoleDisplayable, IDisplayablePage
     {
         private IList<IDisplayable> _displayables;
-
+        private IList<string> _songOptions = new List<string>();
+        private IDictionary<int, MenuOption> _songActions = new Dictionary<int, MenuOption>();
+        private readonly IMusicPlayer _musicPlayer = new MusicPlayer();
 
         public ConsoleSongDisplayable(ICursorNavigator cursorNavigator, IPageNavigator pageNavigator) : base(cursorNavigator, pageNavigator)
         {
+            _songActions.Add(0, MenuOption.Play);
+            _songActions.Add(1, MenuOption.Restart);
+            _songActions.Add(2, MenuOption.Next);
+            _songActions.Add(3, MenuOption.Previous);
+            _songActions.Add(4, MenuOption.GetSimilar);
         }
 
         public void Display()
@@ -35,6 +43,17 @@ namespace LiStreamConsole.Displayables
             if (CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count)
                 return;
 
+            _songOptions = new List<string>()
+                {
+                    _displayables[CursorNavigator.GetCursorRowForColumn(CursorColumn.Left)].IsPlaying() ? "Pause" : "Play",
+                    "Restart",
+                    "Next",
+                    "Previous",
+                    "Get Similar",
+                };
+
+            PrintMiddleMenu(_songOptions, "Song Options");
+
             if (_displayables[CursorNavigator.GetCursorRowForColumn(CursorColumn.Left)]?.GetAdditionalInformation().Count > 0)
             {
                 List<string> additinalInfo = new();
@@ -44,20 +63,20 @@ namespace LiStreamConsole.Displayables
                     additinalInfo.Add($"{item.Header}: {item.Information}");
                 }
 
-                PrintMiddleMenu(additinalInfo, "Info");
+                PrintRightMenu(additinalInfo, "Info");
             }
         }
 
         public int GetColumns()
         {
-            return 2;
+            return 3;
         }
 
         public int GetColumsForItem(int index)
         {
             if (_displayables[index].GetAdditionalInformation().Count > 0)
             {
-                return 2;
+                return 3;
             }
 
             return 1;
@@ -70,7 +89,7 @@ namespace LiStreamConsole.Displayables
 
         public IDisplayablePage GetNavigateBackPage()
         {
-            return PageNavigator.GetPageToNavigateTo(this, MenuOptions.Back);
+            return PageNavigator.GetPageToNavigateTo(this, MenuOption.Back);
         }
 
         public int GetRows()
@@ -81,9 +100,27 @@ namespace LiStreamConsole.Displayables
             return _displayables[0].GetAdditionalInformation().Count - 1;
         }
 
-        public MenuOptions GetSelectedMenuOption()
+        public MenuOption GetSelectedMenuOption()
         {
-            return CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count ? MenuOptions.Back : MenuOptions.StayCurrent; 
+            if (CursorNavigator.GetCursorColumn() == CursorColumn.Middle)
+                return _songActions[CursorNavigator.GetCursorRowForColumn(CursorColumn.Middle)];
+
+            return CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count ? MenuOption.Back : MenuOption.StayCurrent; 
+        }
+
+        public void PlayPauseSong(int index)
+        {
+            bool playSong = !_displayables[index].IsPlaying();
+
+            if (_displayables[index] is IPlayable playable && playSong)
+            {
+                _musicPlayer.UndoLastCommand();
+                _musicPlayer.SetPlayCommand(new PlayCommand(playable));
+                _musicPlayer.ExecutePlay();
+                return;
+            }
+
+            _musicPlayer.UndoLastCommand();
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)

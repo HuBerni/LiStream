@@ -63,7 +63,7 @@ namespace LiStreamConsole.Displayables
 
         public IDisplayablePage GetNavigateBackPage()
         {
-            return PageNavigator.GetPageToNavigateTo(this, MenuOptions.Back);
+            return PageNavigator.GetPageToNavigateTo(this, MenuOption.Back);
         }
 
         public int GetRows()
@@ -74,9 +74,9 @@ namespace LiStreamConsole.Displayables
             return _displayables[0].GetAdditionalInformation().Count - 1;
         }
 
-        public MenuOptions GetSelectedMenuOption()
+        public MenuOption GetSelectedMenuOption()
         {
-            return CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count ? MenuOptions.Back : MenuOptions.StayCurrent;
+            return CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count ? MenuOption.Back : MenuOption.StayCurrent;
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)

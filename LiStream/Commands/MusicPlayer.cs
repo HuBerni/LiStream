@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LiStream.Commands.Interfaces;
+﻿using LiStream.Commands.Interfaces;
 
 namespace LiStream.Commands
 {
@@ -17,12 +12,41 @@ namespace LiStream.Commands
         private ICommand _nextPlayableCommand;
         private ICommand _previousPlayableCommand;
 
+        public MusicPlayer()
+        {
+        }
+
         public MusicPlayer(ICommand playCommand, ICommand pauseCommand, ICommand restartCommand, ICommand nextPlayableCommand, ICommand previousPlayableCommand)
         {
             _playCommand = playCommand;
             _pauseCommand = pauseCommand;
             _restartCommand = restartCommand;
             _nextPlayableCommand = nextPlayableCommand;
+            _previousPlayableCommand = previousPlayableCommand;
+        }
+
+        public void SetPlayCommand(ICommand playCommand)
+        {
+            _playCommand = playCommand;
+        }
+
+        public void SetPauseCommand(ICommand pauseCommand)
+        {
+            _pauseCommand = pauseCommand;
+        }
+
+        public void SetRestartCommand(ICommand restartCommand)
+        {
+            _restartCommand = restartCommand;
+        }
+
+        public void SetNextPlayableCommand(ICommand nextPlayableCommand)
+        {
+            _nextPlayableCommand = nextPlayableCommand;
+        }
+
+        public void SetPreviousPlayableCommand(ICommand previousPlayableCommand)
+        {
             _previousPlayableCommand = previousPlayableCommand;
         }
 

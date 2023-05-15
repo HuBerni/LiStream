@@ -22,7 +22,7 @@ namespace LiStream.Evaluator
             {
                 double similarity = 0;
 
-                similarity = sameBytesPercentage(song.Data, item.Data);
+                similarity = SameBytesPercentage(song.Data, item.Data);
 
                 if (similarity > highestSimilarity && similarity != 1)
                 {
@@ -42,7 +42,7 @@ namespace LiStream.Evaluator
             {
                 double similarity = 0;
 
-                similarity = sameBytesPercentage(song.Data, item.Data);
+                similarity = SameBytesPercentage(song.Data, item.Data);
 
                 if (similarity > _similarityThreshold && similarity != 1)
                 {
@@ -66,15 +66,17 @@ namespace LiStream.Evaluator
         public IArtistProfile GetSimilar(IArtistProfile artist, IList<IArtistProfile> toCompare)
         {
             var rand = new Random();
+            toCompare.Remove(toCompare.FirstOrDefault(x => x.Id.Equals(artist.Id)));
             return toCompare[rand.Next(0, toCompare.Count)];
         }
 
         public IList<IArtistProfile> GetSimilarList(IArtistProfile artist, IList<IArtistProfile> toCompare)
         {
+            toCompare.Remove(toCompare.FirstOrDefault(x => x.Id.Equals(artist.Id)));
             return toCompare.OrderBy(x => Guid.NewGuid()).Take(3).ToList(); 
         }
 
-        private double sameBytesPercentage(byte[] data1, byte[] data2)
+        private double SameBytesPercentage(byte[] data1, byte[] data2)
         {
             int sameBytes = 0;
             int length = data1.Length > data2.Length ? data2.Length : data1.Length;

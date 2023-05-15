@@ -1,7 +1,5 @@
 ﻿using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
-using LiStream.Playables;
-using LiStream.Playables.Interfaces;
 using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
 
@@ -10,7 +8,7 @@ namespace LiStreamConsole.Displayables
     public class ConsoleMainMenuDisplayable : ConsoleDisplayable, IDisplayablePage
     {
         private List<string> _mainMenuOptions = new List<string>();
-        private Dictionary<int, MenuOptions> _mainMenuActions = new Dictionary<int, MenuOptions>();
+        private Dictionary<int, MenuOption> _mainMenuActions = new Dictionary<int, MenuOption>();
         
 
         public ConsoleMainMenuDisplayable(ICursorNavigator cursorNavigator, IPageNavigator pageNavigator) : base(cursorNavigator, pageNavigator)
@@ -21,11 +19,11 @@ namespace LiStreamConsole.Displayables
             _mainMenuOptions.Add("Albums");
             _mainMenuOptions.Add("Exit");
 
-            _mainMenuActions.Add(0, MenuOptions.Songs);
-            _mainMenuActions.Add(1, MenuOptions.Playlists);
-            _mainMenuActions.Add(2, MenuOptions.Artists);
-            _mainMenuActions.Add(3, MenuOptions.Albums);
-            _mainMenuActions.Add(4, MenuOptions.Exit);
+            _mainMenuActions.Add(0, MenuOption.Songs);
+            _mainMenuActions.Add(1, MenuOption.Playlists);
+            _mainMenuActions.Add(2, MenuOption.Artists);
+            _mainMenuActions.Add(3, MenuOption.Albums);
+            _mainMenuActions.Add(4, MenuOption.Exit);
         }
 
         public void Display()
@@ -52,7 +50,7 @@ namespace LiStreamConsole.Displayables
 
         public IDisplayablePage GetNavigateBackPage()
         {
-            return PageNavigator.GetPageToNavigateTo(this, MenuOptions.Back);
+            return PageNavigator.GetPageToNavigateTo(this, MenuOption.Back);
         }
 
         public int GetRows()
@@ -60,7 +58,7 @@ namespace LiStreamConsole.Displayables
             return _mainMenuOptions.Count;
         }
 
-        public MenuOptions GetSelectedMenuOption()
+        public MenuOption GetSelectedMenuOption()
         {
             return _mainMenuActions[CursorNavigator.GetCursorRowForColumn(CursorColumn.Middle)];
         }

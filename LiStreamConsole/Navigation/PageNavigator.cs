@@ -14,14 +14,14 @@ namespace LiStreamConsole.Navigation
             _backMap = backMap;
         }
 
-        public MenuOptions GetNavigationOption(IDisplayablePage page, ICursorNavigator cursorNavigator)
+        public MenuOption GetNavigationOption(IDisplayablePage page, ICursorNavigator cursorNavigator)
         {
             return page.GetSelectedMenuOption();
         }
 
-        public IDisplayablePage GetPageToNavigateTo(IDisplayablePage page, MenuOptions menuOption)
+        public IDisplayablePage GetPageToNavigateTo(IDisplayablePage page, MenuOption menuOption)
         {
-            if (menuOption == MenuOptions.Back)
+            if (menuOption == MenuOption.Back)
             {
                 return _backMap[page];
             }

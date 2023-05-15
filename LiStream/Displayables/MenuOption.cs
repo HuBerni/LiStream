@@ -1,15 +1,21 @@
 ﻿namespace LiStream.Displayables
 {
-    public enum MenuOptions
+    public enum MenuOption
     {
         Main,
         Songs,
         Playlists,
         Artists,
+        ArtistProfile,
         Albums,
         Exit,
         StayCurrent,
         Back,
-        GetSimilar
+        GetSimilar,
+        Play,
+        Pause,
+        Restart,
+        Next,
+        Previous
     }
 }

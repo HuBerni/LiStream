@@ -1,81 +1,48 @@
-﻿using LiStream.DataHandler.Interfaces;
+﻿using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
-using LiStream.Playables.Interfaces;
-using LiStream.User.Interfaces.Profile;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LiStream.Displayables
+public class DisplayableDataRetriever : IDisplayableDataRetriever
 {
-    public class DisplayableDataRetriever : IDisplayableDataRetriever
+        private readonly Dictionary<MenuOption, Func<IList<IDisplayable>>> _displayAllMethodMap;
+        private readonly Dictionary<MenuOption, Func<IDisplayable, IList<IDisplayable>>> _displayableMethodsMap;
+        private readonly Dictionary<MenuOption, Func<IDisplayable, IList<IDisplayable>>> _displayableSimilarMethodMap; 
+
+        public DisplayableDataRetriever(
+            Dictionary<MenuOption, Func<IList<IDisplayable>>> displayAllMethodMap,
+            Dictionary<MenuOption, Func<IDisplayable, IList<IDisplayable>>> displayableMethodsMap,
+            Dictionary<MenuOption, Func<IDisplayable, IList<IDisplayable>>> displayableSimilarMethodMap)
+        {
+            _displayAllMethodMap = displayAllMethodMap;
+            _displayableMethodsMap = displayableMethodsMap;
+            _displayableSimilarMethodMap = displayableSimilarMethodMap;
+        }
+
+    public IList<IDisplayable> GetDisplayables(MenuOption option)
     {
-        private IDictionary<MenuOptions, Func<IList<IDisplayable>>> _displayableMethodsMap;
-        private IDataHandler _dataHandler;
-
-        public DisplayableDataRetriever(IDataHandler dataHandler)
+        if (_displayAllMethodMap.TryGetValue(option, out var method))
         {
-            _dataHandler = dataHandler;
-
-            _displayableMethodsMap = new Dictionary<MenuOptions, Func<IList<IDisplayable>>>
-            {
-                { MenuOptions.Main, () => new List<IDisplayable>() },
-                { MenuOptions.Back, () => new List<IDisplayable>() },
-                { MenuOptions.Songs, () => dataHandler.GetSongs().OfType<IDisplayable>().ToList() },
-                { MenuOptions.Playlists, () => dataHandler.GetPlaylists().OfType<IDisplayable>().ToList() },
-                { MenuOptions.Artists, () => dataHandler.GetArtistProfiles().OfType<IDisplayable>().ToList() },
-                { MenuOptions.Albums, () => dataHandler.GetAlbums().OfType<IDisplayable>().ToList() }
-            };
+            return method.Invoke();
         }
+        return new List<IDisplayable>();
+    }
 
-        public IList<IDisplayable> GetDisplayables(MenuOptions option)
+    public IList<IDisplayable> GetDisplayables(MenuOption option, IDisplayable displayable)
+    {
+        if (_displayableMethodsMap.TryGetValue(option, out var method))
         {
-            return _displayableMethodsMap[option].Invoke();
+            return method.Invoke(displayable);
         }
+        
+        return new List<IDisplayable>();
+    }
 
-        public IList<IDisplayable> GetDisplayables(MenuOptions option, IDisplayable displayable)
+    public IList<IDisplayable> GetSimilar(MenuOption option, IDisplayable displayable)
+    {
+        if (_displayableSimilarMethodMap.TryGetValue(option, out var method))
         {
-            if (displayable is IArtistProfile artist && option == MenuOptions.Songs)
-            {
-                return _dataHandler.GetSongs().Where(x => x.Artist.Id == artist.Id).Cast<IDisplayable>().ToList();
-            }
-            else if (displayable is IArtistProfile artistProfile && option == MenuOptions.Albums)
-            {
-                return _dataHandler.GetArtistAlbums(artistProfile.Id).Cast<IDisplayable>().ToList();
-            }
-
-            if (displayable is IAlbum album)
-            {
-                return _dataHandler.GetAlbumSongs(album.Id).OfType<IDisplayable>().ToList();
-            }
-
-            if (displayable is IPlaylist playlist)
-            {
-                return _dataHandler.GetPlaylistSongs(playlist.Id).OfType<IDisplayable>().ToList();
-            }
-
-            return new List<IDisplayable>();
+            return method.Invoke(displayable);
         }
-
-        public IList<IDisplayable> GetSimilar(IDisplayable displayable)
-        {
-            switch (displayable)
-            {
-                case ISong song:
-                    IList<ISong> similarSongs = _dataHandler.GetSimilarList(song);
-                    return similarSongs.Cast<IDisplayable>().ToList();
-                case IArtistProfile artist:
-                    IList<IArtistProfile> similarArtists = _dataHandler.GetSimilarList(artist);
-                    return similarArtists.Cast<IDisplayable>().ToList();
-                case IPlayableCollection collection:
-                    IList<IPlayableCollection> similarCollections = _dataHandler.GetSimilarList(collection);
-                    return similarCollections.Cast<IDisplayable>().ToList();
-                default:
-                    return new List<IDisplayable>();
-            }
-        }
-
+        
+        return new List<IDisplayable>();
     }
 }
