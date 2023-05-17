@@ -1,4 +1,5 @@
-﻿using LiStream.DataHandler;
+﻿using LiStream.Commands;
+using LiStream.DataHandler;
 using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStream.DtoHandler;
@@ -8,6 +9,7 @@ using LiStream.User.Interfaces.Profile;
 using LiStreamConsole.Displayables;
 using LiStreamConsole.Navigation;
 using LiStreamEF;
+using System.Windows.Input;
 
 var factory = new LiStreamContextFactory();
 var context = factory.CreateDbContext(args);
@@ -71,6 +73,7 @@ var displayableSimilarMethodMap = new Dictionary<MenuOption, Func<IDisplayable, 
     { MenuOption.Songs, displayable => dataHandler.GetSimilarList((ISong)displayable).Cast<IDisplayable>().ToList() },
     { MenuOption.Artists, displayable => dataHandler.GetSimilarList((IArtistProfile)displayable).Cast<IDisplayable>().ToList() },
 };
+
 
 var menu = new ConsoleMenu(
     new DisplayableManger(menuOptions, dataHandler),
