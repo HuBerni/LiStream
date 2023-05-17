@@ -264,5 +264,10 @@ namespace LiStream.DataHandler
         {
             return _reader.GetAlbumSongs(albumID).Select(x => _dtoHandler.ToSong(x)).ToList();
         }
+
+        public IList<ISong> GetArtistSongs(Guid artistID)
+        {
+            return _reader.GetArtistSongs(artistID).Select(x => _dtoHandler.ToSong(x)).ToList();
+        }
     }
 }

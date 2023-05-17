@@ -10,21 +10,41 @@ namespace LiStream.Commands
 {
     public class PreviousPlayableCommand : ICommand
     {
-        private readonly IPlayableCollection _collection;
+        private readonly IList<IPlayable> _playables;
 
-        public PreviousPlayableCommand(IPlayableCollection collection)
+        public PreviousPlayableCommand(IList<IPlayable> playables)
         {
-            _collection = collection;
+            _playables = playables;
         }
 
         public void Execute()
         {
-            _collection.Previous();
+            var invoker = new Invoker();
+            int index = _playables.ToList().FindIndex(x => x.IsPlaying);
+
+            if (index <= 0 || index == -1)
+                return;
+
+            invoker.SetCommand(new PauseCommand(_playables[index]));
+            invoker.Execute();
+
+            invoker.SetCommand(new PlayCommand(_playables[index - 1]));
+            invoker.Execute();
         }
 
         public void Undo()
         {
-            _collection.Next();
+            var invoker = new Invoker();
+            int index = _playables.ToList().FindIndex(x => x.IsPlaying);
+
+            if (index >= _playables.Count - 2 || index == -1)
+                return;
+
+            invoker.SetCommand(new PauseCommand(_playables[index]));
+            invoker.Execute();
+
+            invoker.SetCommand(new PlayCommand(_playables[index + 1]));
+            invoker.Execute();
         }
     }
 }

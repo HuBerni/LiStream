@@ -45,7 +45,7 @@ namespace LiStreamConsole.Displayables
 
         public IList<IDisplayable> GetDisplayables()
         {
-            return null;
+            return new List<IDisplayable>();
         }
 
         public IDisplayablePage GetNavigateBackPage()
@@ -55,7 +55,7 @@ namespace LiStreamConsole.Displayables
 
         public int GetRows()
         {
-            return _mainMenuOptions.Count;
+            return _mainMenuOptions.Count - 1;
         }
 
         public MenuOption GetSelectedMenuOption()

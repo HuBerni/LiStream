@@ -16,8 +16,9 @@ namespace LiStream.Commands
         {
         }
 
-        public MusicPlayer(ICommand playCommand, ICommand pauseCommand, ICommand restartCommand, ICommand nextPlayableCommand, ICommand previousPlayableCommand)
+        public MusicPlayer(Stack<ICommand> commandHistory, ICommand playCommand, ICommand pauseCommand, ICommand restartCommand, ICommand nextPlayableCommand, ICommand previousPlayableCommand)
         {
+            _commandHistory = commandHistory;
             _playCommand = playCommand;
             _pauseCommand = pauseCommand;
             _restartCommand = restartCommand;

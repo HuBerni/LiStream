@@ -18,7 +18,14 @@ namespace LiStream.Displayables
             if(option == MenuOption.Back)
                 return page.GetNavigateBackPage();
 
-            page = _pageMap[option];
+            try
+            {
+                page = _pageMap[option];
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             return page;
         }

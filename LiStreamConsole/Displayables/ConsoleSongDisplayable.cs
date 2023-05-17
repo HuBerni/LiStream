@@ -2,7 +2,6 @@
 using LiStream.Commands.Interfaces;
 using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
-using LiStream.Playables.Interfaces;
 using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
 
@@ -106,21 +105,6 @@ namespace LiStreamConsole.Displayables
                 return _songActions[CursorNavigator.GetCursorRowForColumn(CursorColumn.Middle)];
 
             return CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count ? MenuOption.Back : MenuOption.StayCurrent; 
-        }
-
-        public void PlayPauseSong(int index)
-        {
-            bool playSong = !_displayables[index].IsPlaying();
-
-            if (_displayables[index] is IPlayable playable && playSong)
-            {
-                _musicPlayer.UndoLastCommand();
-                _musicPlayer.SetPlayCommand(new PlayCommand(playable));
-                _musicPlayer.ExecutePlay();
-                return;
-            }
-
-            _musicPlayer.UndoLastCommand();
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)

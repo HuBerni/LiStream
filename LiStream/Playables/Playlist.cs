@@ -41,7 +41,7 @@ namespace LiStream.Playables
 
         public void Next()
         {
-            if (CurrentPlayableIndex == Playables.Count - 1)
+            if (CurrentPlayableIndex == Playables?.Count - 1)
             {
                 CurrentPlayableIndex = 0;
                 return;
@@ -50,23 +50,24 @@ namespace LiStream.Playables
             CurrentPlayableIndex++;
         }
 
-        public void PlayItem(int index)
-        {
-            if (index < 0 || index > Playables.Count - 1)
-                    throw new IndexOutOfRangeException();
-
-            CurrentPlayableIndex = index;   
-        }
-
         public void Previous()
         {
             if (CurrentPlayableIndex == 0)
             {
-                CurrentPlayableIndex = Playables.Count - 1;
+                CurrentPlayableIndex = (Playables?.Count - 1) > 0 ? (Playables!.Count - 1) : 0;
+
                 return;
             }
 
             CurrentPlayableIndex--;
+        }
+
+        public void PlayItem(int index)
+        {
+            if (index < 0 || index > Playables?.Count - 1)
+                throw new IndexOutOfRangeException();
+
+            CurrentPlayableIndex = index;
         }
 
         public void RemoveSong(ISong song)

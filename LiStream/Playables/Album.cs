@@ -14,7 +14,7 @@ namespace LiStream.Playables
     {
         public Guid Id { get; private set; }
 
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
 
         public DateTime ReleaseDate { get; private set; }
 
@@ -34,7 +34,7 @@ namespace LiStream.Playables
         }
         public void Next()
         {
-            if (CurrentPlayableIndex == Playables.Count - 1)
+            if (CurrentPlayableIndex == Playables?.Count - 1)
             {
                 CurrentPlayableIndex = 0;
                 return;
@@ -47,7 +47,8 @@ namespace LiStream.Playables
         {
             if (CurrentPlayableIndex == 0)
             {
-                CurrentPlayableIndex = Playables.Count - 1;
+                CurrentPlayableIndex = (Playables?.Count - 1) > 0 ? (Playables!.Count - 1) : 0;
+
                 return;
             }
 
@@ -56,9 +57,9 @@ namespace LiStream.Playables
 
         public void PlayItem(int index)
         {
-            if (index < 0 || index > Playables.Count - 1)
+            if (index < 0 || index > Playables?.Count - 1)
                 throw new IndexOutOfRangeException();
-            
+
             CurrentPlayableIndex = index;
         }
 
@@ -80,6 +81,21 @@ namespace LiStream.Playables
         public bool IsPlaying()
         {
             return false;
+        }
+
+        public void Play()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Pause()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Restart()
+        {
+            throw new NotImplementedException();
         }
     }
 }

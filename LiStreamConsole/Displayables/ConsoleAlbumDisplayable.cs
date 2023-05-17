@@ -22,7 +22,7 @@ namespace LiStreamConsole.Displayables
                 names.Add(item.GetDisplayableName());
             }
 
-            PrintLeftMenu(names, "Artists");
+            PrintLeftMenu(names, "Albums");
             if (CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count)
                 return;
 

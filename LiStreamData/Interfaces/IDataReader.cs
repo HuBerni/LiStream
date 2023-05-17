@@ -28,5 +28,6 @@ namespace LiStreamData.Interfaces
 
         IList<SongDto> GetPlaylistSongs(Guid playlistID);
         IList<SongDto> GetAlbumSongs(Guid albumID);
+        IList<SongDto> GetArtistSongs(Guid artistID);
     }
 }

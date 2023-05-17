@@ -20,7 +20,7 @@ namespace LiStream.DtoHandler
         IPlaylist ToPlaylist(PlaylistDto playlistDto);
         ArtistDto ToDto(IArtistProfile artist);
         IArtistProfile ToArtist(ArtistDto artistDto);
-        PlayableCollectionDto ToDto(IPlayableCollection playableCollectionDto);
+        PlayableCollectionDto ToDto(IPlayable playableCollectionDto);
         IPlayableCollection ToPlayableCollection(PlayableCollectionDto playableCollectionDto);
         SongDto ToDto(ISong song);
         ISong ToSong(SongDto songDto);

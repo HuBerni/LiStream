@@ -1,31 +1,46 @@
 ﻿using LiStream.Commands.Interfaces;
 using LiStream.Playables.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiStream.Commands
 {
     public class NextPlayableCommand : ICommand
     {
-        private readonly IPlayableCollection _collection;
+        private readonly IList<IPlayable> _playables;
 
-        public NextPlayableCommand(IPlayableCollection collection)
+        public NextPlayableCommand(IList<IPlayable> playables)
         {
-            _collection = collection;
+            _playables = playables;
         }
 
 
         public void Execute()
         {
-            _collection.Next();
+            var invoker = new Invoker();
+            int index = _playables.ToList().FindIndex(x => x.IsPlaying);
+
+            if (index >= _playables.Count - 1 || index == -1)
+                return;
+
+            invoker.SetCommand(new PauseCommand(_playables[index]));
+            invoker.Execute();
+
+            invoker.SetCommand(new PlayCommand(_playables[index + 1]));
+            invoker.Execute();
         }
 
         public void Undo()
         {
-            _collection.Previous();
+            var invoker = new Invoker();
+            int index = _playables.ToList().FindIndex(x => x.IsPlaying);
+
+            if (index <= 0 || index == -1)
+                return;
+
+            invoker.SetCommand(new PauseCommand(_playables[index]));
+            invoker.Execute();
+
+            invoker.SetCommand(new PlayCommand(_playables[index - 1]));
+            invoker.Execute();
         }
     }
 }

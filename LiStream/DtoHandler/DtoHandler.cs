@@ -15,7 +15,7 @@ namespace LiStream.DtoHandler
 {
     public class DtoHandler : IDtoHandler
     {
-        public PlayableCollectionDto ToDto(IPlayableCollection playableCollectionDto)
+        public PlayableCollectionDto ToDto(IPlayable playableCollectionDto)
         {
             var dto = new PlayableCollectionDto();
             dto.Id = playableCollectionDto.Id;

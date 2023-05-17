@@ -82,6 +82,18 @@ namespace LiStreamEF
             return artists.ToArtistDto(true, true);
         }
 
+        public IList<SongDto> GetArtistSongs(Guid artistID)
+        {
+            var songs = _context.Songs
+                .Include(x => x.Artist)
+                .Include(x => x.Artists)
+                .Include(x => x.Album)
+                .Where(x => x.Artist.ArtistId.Equals(artistID))
+                .ToList();
+
+            return songs.ToSongDto(true, true);
+        }
+
         public IList<SongDto> GetFavoriteSongs(Guid userID)
         {
             var favSongs = _context.UserFavoriteSongs
