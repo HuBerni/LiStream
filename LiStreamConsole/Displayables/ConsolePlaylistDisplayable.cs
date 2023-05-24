@@ -77,6 +77,11 @@ namespace LiStreamConsole.Displayables
             return CursorNavigator.GetCursorRowForColumn(Navigation.CursorColumn.Left) >= _displayables.Count ? MenuOption.Back : MenuOption.StayCurrent;
         }
 
+        public void SelectedAction(MenuOption pageOption, int selectedIndex)
+        {
+
+        }
+
         public void SetDisplayables(IList<IDisplayable> displayables)
         {
             _displayables = displayables;

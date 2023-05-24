@@ -3,11 +3,11 @@ using LiStream.Displayables.Interfaces;
 
 namespace LiStream.Displayables
 {
-    public class DisplayableManger : IDisplayableManager
+    public class DisplayableManager : IDisplayableManager
     {
         private IDictionary<MenuOption, IDisplayablePage> _pageMap;
 
-        public DisplayableManger(IDictionary<MenuOption, IDisplayablePage> pageMap, IDataHandler dataHandler)
+        public DisplayableManager(IDictionary<MenuOption, IDisplayablePage> pageMap)
         {
             _pageMap = pageMap;
         }
@@ -22,7 +22,7 @@ namespace LiStream.Displayables
             {
                 page = _pageMap[option];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -34,7 +34,7 @@ namespace LiStream.Displayables
         {
             foreach (var item in _pageMap)
             {
-                if (item.Value == page)
+                if (item.Value.GetType() == page.GetType())
                     return item.Key;
             }
 

@@ -15,7 +15,7 @@ namespace LiStreamConsole.Displayables
             PageNavigator = pageNavigator;
         }
 
-        private void printOptions(IList<string> options, string header, CursorColumn column)
+        private void PrintOptions(IList<string> options, string header, CursorColumn column)
         {
             var indentation = (int)column;
             bool activeCol = CursorNavigator.GetCursorColumn() == column;
@@ -46,17 +46,17 @@ namespace LiStreamConsole.Displayables
         protected void PrintLeftMenu(IList<string> options, string header)
         {
             options.Add("\nBack");
-            printOptions(options, header, CursorColumn.Left);
+            PrintOptions(options, header, CursorColumn.Left);
         }
 
         protected void PrintMiddleMenu(IList<string> options, string header)
         {
-            printOptions(options, header, CursorColumn.Middle);
+            PrintOptions(options, header, CursorColumn.Middle);
         }
 
         protected void PrintRightMenu(IList<string> options,  string header)
         {
-            printOptions(options, header, CursorColumn.Right);
+            PrintOptions(options, header, CursorColumn.Right);
         }
     }
 }

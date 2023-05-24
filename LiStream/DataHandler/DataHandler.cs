@@ -1,6 +1,6 @@
 ﻿using LiStream.DataHandler.Interfaces;
 using LiStream.DtoHandler;
-using LiStream.Evaluator.Interfaces;
+using LiStream.Evaluators.Interfaces;
 using LiStream.Playables.Interfaces;
 using LiStream.User;
 using LiStream.User.Interfaces;

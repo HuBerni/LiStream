@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiStream.Evaluator.Interfaces
+namespace LiStream.Evaluators.Interfaces
 {
     public interface IEvaluator
     {

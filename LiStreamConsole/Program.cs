@@ -3,7 +3,7 @@ using LiStream.DataHandler;
 using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStream.DtoHandler;
-using LiStream.Evaluator;
+using LiStream.Evaluators;
 using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using LiStreamConsole.Displayables;
@@ -76,7 +76,7 @@ var displayableSimilarMethodMap = new Dictionary<MenuOption, Func<IDisplayable, 
 
 
 var menu = new ConsoleMenu(
-    new DisplayableManger(menuOptions, dataHandler),
+    new DisplayableManager(menuOptions),
     cursorNavigator,
     pageNavigator,
     new DisplayableDataRetriever(displayAllMethodMap, displayableMethodsMap, displayableSimilarMethodMap));

@@ -13,5 +13,6 @@ namespace LiStream.Displayables.Interfaces
         void SetDisplayables(IList<IDisplayable> displayables);
         MenuOption GetSelectedMenuOption();
         IDisplayablePage GetNavigateBackPage();
+        void SelectedAction(MenuOption pageOption, int selectedIndex);
     }
 }

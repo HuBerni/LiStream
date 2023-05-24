@@ -1,7 +1,7 @@
 ﻿using LiStream.Commands;
-using LiStream.Commands.Interfaces;
 using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
+using LiStream.Playables.Interfaces;
 using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
 
@@ -12,7 +12,7 @@ namespace LiStreamConsole.Displayables
         private IList<IDisplayable> _displayables;
         private IList<string> _songOptions = new List<string>();
         private IDictionary<int, MenuOption> _songActions = new Dictionary<int, MenuOption>();
-        private readonly IMusicPlayer _musicPlayer = new MusicPlayer();
+        private CommandExecutor _commandExecutor = new CommandExecutor();
 
         public ConsoleSongDisplayable(ICursorNavigator cursorNavigator, IPageNavigator pageNavigator) : base(cursorNavigator, pageNavigator)
         {
@@ -105,6 +105,31 @@ namespace LiStreamConsole.Displayables
                 return _songActions[CursorNavigator.GetCursorRowForColumn(CursorColumn.Middle)];
 
             return CursorNavigator.GetCursorRowForColumn(CursorColumn.Left) >= _displayables.Count ? MenuOption.Back : MenuOption.StayCurrent; 
+        }
+
+        public void SelectedAction(MenuOption pageOption, int selectedIndex)
+        {
+            IPlayable? playable = GetDisplayables()[selectedIndex] as IPlayable;
+
+            if (playable is null)
+                return;
+
+            switch (pageOption)
+            {
+                case MenuOption.StayCurrent:
+                case MenuOption.Play:
+                    _commandExecutor.ExecuteCommand(new PlayPauseCommand(playable));
+                    break;
+                case MenuOption.Restart:
+                    _commandExecutor.ExecuteCommand(new RestartCommand(playable));
+                    break;
+                case MenuOption.Next:
+                    _commandExecutor.ExecuteCommand(new NextPlayableCommand(GetDisplayables().OfType<IPlayable>().ToList()));
+                    break;
+                case MenuOption.Previous:
+                    _commandExecutor.ExecuteCommand(new PreviousPlayableCommand(GetDisplayables().OfType<IPlayable>().ToList()));
+                    break;
+            }
         }
 
         public void SetDisplayables(IList<IDisplayable> displayables)

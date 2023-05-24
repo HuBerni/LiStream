@@ -21,10 +21,10 @@ namespace LiStream.Commands
             if (index >= _playables.Count - 1 || index == -1)
                 return;
 
-            invoker.SetCommand(new PauseCommand(_playables[index]));
+            invoker.SetCommand(new PauseCommand(_playables[index++]));
             invoker.Execute();
 
-            invoker.SetCommand(new PlayCommand(_playables[index + 1]));
+            invoker.SetCommand(new PlayCommand(_playables[index]));
             invoker.Execute();
         }
 
@@ -36,10 +36,10 @@ namespace LiStream.Commands
             if (index <= 0 || index == -1)
                 return;
 
-            invoker.SetCommand(new PauseCommand(_playables[index]));
+            invoker.SetCommand(new PauseCommand(_playables[index--]));
             invoker.Execute();
 
-            invoker.SetCommand(new PlayCommand(_playables[index - 1]));
+            invoker.SetCommand(new PlayCommand(_playables[index]));
             invoker.Execute();
         }
     }

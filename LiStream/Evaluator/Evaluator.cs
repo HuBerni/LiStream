@@ -1,4 +1,4 @@
-﻿using LiStream.Evaluator.Interfaces;
+﻿using LiStream.Evaluators.Interfaces;
 using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiStream.Evaluator
+namespace LiStream.Evaluators
 {
     public class Evaluator : IEvaluator
     {
@@ -66,14 +66,16 @@ namespace LiStream.Evaluator
         public IArtistProfile GetSimilar(IArtistProfile artist, IList<IArtistProfile> toCompare)
         {
             var rand = new Random();
-            toCompare.Remove(toCompare.FirstOrDefault(x => x.Id.Equals(artist.Id)));
-            return toCompare[rand.Next(0, toCompare.Count)];
+            var compList = toCompare.ToList();
+            compList.Remove(compList.FirstOrDefault(x => x.Id.Equals(artist.Id)));
+            return compList[rand.Next(0, compList.Count)];
         }
 
         public IList<IArtistProfile> GetSimilarList(IArtistProfile artist, IList<IArtistProfile> toCompare)
         {
-            toCompare.Remove(toCompare.FirstOrDefault(x => x.Id.Equals(artist.Id)));
-            return toCompare.OrderBy(x => Guid.NewGuid()).Take(3).ToList(); 
+            var compList = toCompare.ToList();
+            compList.Remove(compList.FirstOrDefault(x => x.Id.Equals(artist.Id)));
+            return compList.OrderBy(x => Guid.NewGuid()).Take(3).ToList(); 
         }
 
         private double SameBytesPercentage(byte[] data1, byte[] data2)

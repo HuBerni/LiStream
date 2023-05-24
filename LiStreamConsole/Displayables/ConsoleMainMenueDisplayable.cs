@@ -63,6 +63,10 @@ namespace LiStreamConsole.Displayables
             return _mainMenuActions[CursorNavigator.GetCursorRowForColumn(CursorColumn.Middle)];
         }
 
+        public void SelectedAction(MenuOption pageOption, int selectedIndex)
+        {
+        }
+
         public void SetDisplayables(IList<IDisplayable> displayables)
         {
         }
