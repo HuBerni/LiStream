@@ -136,5 +136,10 @@ namespace LiStreamConsole.Displayables
         {
             _displayables = displayables;
         }
+
+        string IDisplayablePage.Title()
+        {
+            return "Console Songs";
+        }
     }
 }

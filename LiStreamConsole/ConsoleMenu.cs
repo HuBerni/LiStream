@@ -1,24 +1,29 @@
 ﻿using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStreamConsole.Displayables;
+using LiStreamConsole.Input.Interfaces;
 using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
 
 public class ConsoleMenu
 {
-    private ConsoleKeyInfo _keyInfo;
     private IDisplayableManager _displayableManager;
     private IDisplayablePage _currentPage;
     private ICursorNavigator _cursorNavigator;
     private IPageNavigator _pageNavigator;
     private IDisplayableDataRetriever _dataRetriever;
+    private IInputHandler _inputHandler;
 
-    public ConsoleMenu(IDisplayableManager displayableManager, ICursorNavigator cursorNavigator, IPageNavigator pageNavigator, IDisplayableDataRetriever dataRetriever)
+    public ConsoleMenu(IDisplayableManager displayableManager, ICursorNavigator cursorNavigator, IPageNavigator pageNavigator, IDisplayableDataRetriever dataRetriever, IInputHandler inputHandler)
     {
         _displayableManager = displayableManager;
         _cursorNavigator = cursorNavigator;
         _pageNavigator = pageNavigator;
         _dataRetriever = dataRetriever;
+        _inputHandler = inputHandler;
+
+        _inputHandler.OnEnterKeyInput += ProcessPageOption;
+
         Console.CursorVisible = false;
     }
 
@@ -37,34 +42,13 @@ public class ConsoleMenu
 
             _currentPage.Display();
 
-            option = MenuInput();
+            option = _inputHandler.HandleInput(_pageNavigator, _currentPage, _cursorNavigator);
 
             if (option == MenuOption.Exit)
                 break;
 
             Console.Clear();
         } while (true);
-    }
-
-    private MenuOption MenuInput()
-    {
-        _keyInfo = Console.ReadKey(false);
-
-        if (_keyInfo.Key == ConsoleKey.Enter)
-        {
-            var pageOption = _pageNavigator.GetNavigationOption(_currentPage, _cursorNavigator);
-
-            if (pageOption == MenuOption.Back)
-                return pageOption;
-
-            pageOption = ProcessPageOption(pageOption);
-
-            return pageOption;
-        }
-
-        HandleNonEnterKeyInput();
-
-        return MenuOption.StayCurrent;
     }
 
     private MenuOption ProcessPageOption(MenuOption pageOption)
@@ -93,12 +77,6 @@ public class ConsoleMenu
         }
 
         return pageOption;
-    }
-
-    private void HandleNonEnterKeyInput()
-    {
-        _cursorNavigator.HandleKeyEntry(_keyInfo, _currentPage);
-        _currentPage.Display();
     }
 
     private void ResetCursorNavigator()

@@ -70,5 +70,9 @@ namespace LiStreamConsole.Displayables
         public void SetDisplayables(IList<IDisplayable> displayables)
         {
         }
+        public string Title()
+        {
+            return "Console Main";
+        }
     }
 }

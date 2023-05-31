@@ -7,7 +7,9 @@ using LiStream.Evaluators;
 using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using LiStreamConsole.Displayables;
+using LiStreamConsole.Input;
 using LiStreamConsole.Navigation;
+using LiStreamConsole.Wrapper;
 using LiStreamEF;
 using System.Windows.Input;
 
@@ -74,11 +76,13 @@ var displayableSimilarMethodMap = new Dictionary<MenuOption, Func<IDisplayable, 
     { MenuOption.Artists, displayable => dataHandler.GetSimilarList((IArtistProfile)displayable).Cast<IDisplayable>().ToList() },
 };
 
+var inputHandler = new InputHandler(new ConsoleWrapper());
 
 var menu = new ConsoleMenu(
     new DisplayableManager(menuOptions),
     cursorNavigator,
     pageNavigator,
-    new DisplayableDataRetriever(displayAllMethodMap, displayableMethodsMap, displayableSimilarMethodMap));
+    new DisplayableDataRetriever(displayAllMethodMap, displayableMethodsMap, displayableSimilarMethodMap),
+    inputHandler);
 
 menu.MainMenu();

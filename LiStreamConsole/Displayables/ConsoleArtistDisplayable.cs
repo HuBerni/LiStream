@@ -114,5 +114,9 @@ namespace LiStreamConsole.Displayables
         {
             _displayables = displayables;
         }
+        public string Title()
+        {
+            return "Console Artists";
+        }
     }
 }
