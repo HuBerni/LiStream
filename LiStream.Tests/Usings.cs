@@ -6,5 +6,5 @@ global using LiStream.Displayables.Interfaces;
 global using LiStream.Evaluators;
 global using LiStream.Playables.Interfaces;
 global using LiStream.User.Interfaces.Profile;
-
+global using Moq;
 

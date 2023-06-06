@@ -1,5 +1,3 @@
-using Moq;
-
 namespace LiStream.Tests
 {
     [TestClass]

@@ -1,7 +1,6 @@
 using LiStream.Displayables.Interfaces;
 using LiStreamConsole.Input.Interfaces;
 using LiStreamConsole.Navigation.Interfaces;
-using Moq;
 
 namespace LiStreamConsole.Tests
 {

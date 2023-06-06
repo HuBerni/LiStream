@@ -2,7 +2,6 @@ using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStreamConsole.Navigation;
 using LiStreamConsole.Navigation.Interfaces;
-using Moq;
 
 namespace LiStreamTests.Navigation
 {

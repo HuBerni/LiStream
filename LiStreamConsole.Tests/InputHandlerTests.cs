@@ -3,7 +3,6 @@ using LiStream.Displayables.Interfaces;
 using LiStreamConsole.Input;
 using LiStreamConsole.Navigation.Interfaces;
 using LiStreamConsole.Wrapper.Interfaces;
-using Moq;
 
 namespace LiStreamConsole.Tests
 {
@@ -105,7 +104,7 @@ namespace LiStreamConsole.Tests
         }
 
         [TestMethod]
-        public void HandleInput_ShouldCallOnEnterKeyInputEvent_IfItExists()
+        public void HandleInput_ShouldCallOnEnterKeyInputEvent_IfEventExists()
         {
             #region Arrange
             var eventCalled = false;

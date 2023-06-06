@@ -1,6 +1,4 @@
-﻿using Moq;
-
-namespace LiStream.Tests
+﻿namespace LiStream.Tests
 {
     [TestClass]
     public class NextPlayableCommandTests
