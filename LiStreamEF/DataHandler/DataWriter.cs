@@ -1,7 +1,8 @@
 ﻿using LiStreamData.DTO;
 using LiStreamData.Interfaces;
+using LiStreamEF.DTO;
 using LiStreamEF.Models;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace LiStreamEF
 {
@@ -296,10 +297,10 @@ namespace LiStreamEF
                     SongId = Guid.NewGuid(),
                     Title = song.Name,
                     Data = song.Data,
-                    ReleaseDate = DateTime.Now,
+                    ReleaseDate = song.ReleaseDate,
                     Lenght = (int)song.Lenght.TotalSeconds,
                     ArtistId = song.Artist.Id,
-                    AlbumId = song.Album?.Id,
+                    AlbumId = song.Album?.Id == Guid.Empty ? null : song.Album?.Id,
                     PlayCount = 0
                 };
 
@@ -323,9 +324,12 @@ namespace LiStreamEF
         {
             try
             {
-                _context.Songs.FirstOrDefault(s => s.Equals(songID)).AlbumId = albumID;
-
-                _context.SaveChanges();
+                var song = _context.Songs.FirstOrDefault(s => s.SongId == songID);
+                if (song != null)
+                {
+                    song.AlbumId = albumID;
+                    _context.SaveChanges();
+                }
             }
             catch (Exception)
             {
@@ -346,6 +350,8 @@ namespace LiStreamEF
                     AddedBy = userID,
                     AddDate = DateTime.Now,
                 };
+
+                _context.Entry(playlistitem).State = EntityState.Detached;
 
                 _context.PlaylistItems.Add(playlistitem);
                 _context.SaveChanges();
@@ -409,6 +415,9 @@ namespace LiStreamEF
                 var a = _context.Albums.FirstOrDefault(a => a.AlbumId.Equals(album.Id));
 
                 a.Name = album.Name;
+                a.Artist = album.Artist.Id;
+                a.AlbumId = album.Id;
+                a.ReleaseDate = album.ReleaseDate;
 
                 _context.Update(a);
                 _context.SaveChanges();
@@ -469,7 +478,12 @@ namespace LiStreamEF
                 var s = _context.Songs.FirstOrDefault(s => s.SongId.Equals(song.Id));
 
                 s.Title = song.Name;
-                s.AlbumId = song.Album.Id;
+                s.AlbumId = song.Album?.Id == Guid.Empty ? null : song.Album.Id;
+                s.ArtistId = song.Artist.Id;
+                s.ReleaseDate = song.ReleaseDate;
+
+                _context.Update(s);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -487,6 +501,9 @@ namespace LiStreamEF
 
                 u.Name = user.DisplayName;
                 u.Email = user.Email;
+
+                _context.Update(u);
+                _context.SaveChanges();
             }
             catch (Exception)
             {

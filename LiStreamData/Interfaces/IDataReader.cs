@@ -20,6 +20,7 @@ namespace LiStreamData.Interfaces
         IList<ArtistDto> GetArtistProfiles();
         IList<AlbumDto> GetAlbums();
         IList<PlaylistDto> GetPlaylists();
+        IList<UserDto> GetUserProfiles();
 
         IList<SongDto> GetFavoriteSongs(Guid userID);
         IList<PlaylistDto> GetUserPlaylists(Guid userID);

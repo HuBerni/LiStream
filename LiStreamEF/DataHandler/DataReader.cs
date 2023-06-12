@@ -203,5 +203,19 @@ namespace LiStreamEF
 
             return user.ToUserDto(true, true, true);
         }
+
+        public IList<UserDto> GetUserProfiles()
+        {
+            var users = _context.Users
+                .Include(x => x.UserFavoriteSongs)
+                .ThenInclude(x => x.Song)
+                .Include(x => x.UserFollowedPlayableCollections)
+                .Include(x => x.Playlists)
+                .ThenInclude(x => x.PlaylistItems)
+                .ThenInclude(x => x.Song)
+                .ToList();
+
+            return users.ToUserDto(true, true, true);
+        }
     }
 }

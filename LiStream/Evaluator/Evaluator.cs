@@ -40,9 +40,7 @@ namespace LiStream.Evaluators
 
             foreach (var item in toCompare)
             {
-                double similarity = 0;
-
-                similarity = SameBytesPercentage(song.Data, item.Data);
+                var similarity = SameBytesPercentage(song.Data, item.Data);
 
                 if (similarity > _similarityThreshold && similarity != 1)
                 {

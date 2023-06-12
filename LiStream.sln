@@ -20,7 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{15ADB351
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiStream.Tests", "LiStream.Tests\LiStream.Tests.csproj", "{BDF7A535-6222-4798-82BF-519CC838B6F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiStreamConsole.Tests", "LiStreamConsole.Tests\LiStreamConsole.Tests.csproj", "{B65FAA8F-1E87-4D5C-AC9E-F0A95298695D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiStreamConsole.Tests", "LiStreamConsole.Tests\LiStreamConsole.Tests.csproj", "{B65FAA8F-1E87-4D5C-AC9E-F0A95298695D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiStreamAPI", "LiStreamAPI\LiStreamAPI.csproj", "{2E714932-DF4E-43B1-B5D6-CDDD6F83C315}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{B65FAA8F-1E87-4D5C-AC9E-F0A95298695D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65FAA8F-1E87-4D5C-AC9E-F0A95298695D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B65FAA8F-1E87-4D5C-AC9E-F0A95298695D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E714932-DF4E-43B1-B5D6-CDDD6F83C315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E714932-DF4E-43B1-B5D6-CDDD6F83C315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E714932-DF4E-43B1-B5D6-CDDD6F83C315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E714932-DF4E-43B1-B5D6-CDDD6F83C315}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

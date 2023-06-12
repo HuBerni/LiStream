@@ -1,5 +1,4 @@
-﻿using LiStream.Commands;
-using LiStream.DataHandler;
+﻿using LiStream.DataHandler;
 using LiStream.Displayables;
 using LiStream.Displayables.Interfaces;
 using LiStream.DtoHandler;
@@ -11,7 +10,6 @@ using LiStreamConsole.Input;
 using LiStreamConsole.Navigation;
 using LiStreamConsole.Wrapper;
 using LiStreamEF;
-using System.Windows.Input;
 
 var factory = new LiStreamContextFactory();
 var context = factory.CreateDbContext(args);

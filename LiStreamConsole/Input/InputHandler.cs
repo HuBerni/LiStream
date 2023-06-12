@@ -29,7 +29,7 @@ namespace LiStreamConsole.Input
                 if (pageOption == MenuOption.Back)
                     return pageOption;
 
-                pageOption = OnEnterKeyInput.Invoke(pageOption);
+                pageOption = OnEnterKeyInput?.Invoke(pageOption) ?? pageOption;
 
                 return pageOption;
             }

@@ -26,9 +26,9 @@ namespace LiStreamEF.DTO
             return userDto;
         }
 
-        public static IList<UserDto> ToUserDto(this ICollection<User> users)
+        public static IList<UserDto> ToUserDto(this ICollection<User> users, bool mapFavPlayables = false, bool mapPlaylists = false, bool mapFollowedCollections = false)
         {
-            return users.Select(x => x.ToUserDto()).ToList();
+            return users.Select(x => x.ToUserDto(mapFavPlayables, mapPlaylists, mapFollowedCollections)).ToList();
         }
     }
 }

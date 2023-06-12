@@ -105,7 +105,7 @@ namespace LiStream.DtoHandler
                 Name = song.Name,
                 ReleaseDate = song.ReleaseDate,
                 Lenght = song.Lenght,
-                Features = song.Features.Select(f => ToDto(f)).ToList(),
+                Features = song.Features?.Select(f => ToDto(f)).ToList(),
                 Artist =  song.Artist != null ? ToDto(song.Artist) : null,
                 Album = song.Album != null ? ToDto(song.Album) : null,
                 PlayCount = song.PlayCount,
