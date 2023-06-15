@@ -10,6 +10,6 @@ namespace LiStream.User.Interfaces.Profile
     public interface IUserProfile : IProfile
     {
         IList<IPlaylist>? Playlists { get; }
-        IList<IPlayable>? FollowedPlayableCollections { get; }
+        IList<IPlayableCollection>? FollowedPlayableCollections { get; }
     }
 }

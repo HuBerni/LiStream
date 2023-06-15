@@ -1,18 +1,10 @@
 ﻿using LiStream.DataHandler.Interfaces;
-using LiStream.DtoHandler;
+using LiStream.DtoHandler.Interfaces;
 using LiStream.Evaluators.Interfaces;
 using LiStream.Playables.Interfaces;
-using LiStream.User;
-using LiStream.User.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using LiStreamData.DTO;
 using LiStreamData.Interfaces;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiStream.DataHandler
 {
@@ -66,29 +58,29 @@ namespace LiStream.DataHandler
             return _reader.GetSongs().Select(x => _dtoHandler.ToSong(x)).ToList();
         }
 
-        public bool InsertArtist(ArtistDto artist)
+        public bool CreateArtist(ArtistDto artist)
         {
-            return _writer.InsertArtist(artist);
+            return _writer.CreateArtist(artist);
         }
 
-        public bool InsertUser(UserDto user)
+        public bool CreateUser(UserDto user)
         {
-            return _writer.InsertUser(user);
+            return _writer.CreateUser(user);
         }
 
-        public bool InsertAlbum(AlbumDto album)
+        public bool CreateAlbum(AlbumDto album)
         {
-            return _writer.InsertAlbum(album);
+            return _writer.CreateAlbum(album);
         }
 
-        public bool InsertPlaylist(PlaylistDto playlist)
+        public bool CreatePlaylist(PlaylistDto playlist)
         {
-            return _writer.InsertPlaylist(playlist);
+            return _writer.CreatePlaylist(playlist);
         }
 
-        public bool InsertSong(SongDto song)
+        public bool CreateSong(SongDto song)
         {
-            return _writer.InsertSong(song);
+            return _writer.CreateSong(song);
         }
 
         public bool InsertSongToPlaylist(Guid songID, Guid playlistID, Guid userID)

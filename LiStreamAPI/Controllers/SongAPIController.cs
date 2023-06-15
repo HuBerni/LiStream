@@ -224,92 +224,6 @@ namespace LiStreamAPI.Controllers
             return Ok(_response);
         }
 
-        [HttpGet]
-        [Route("similar/{id:guid}", Name = "GetSimilarSong")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> GetSimilarSong(Guid id)
-        {
-            try
-            {
-                var song = _dataHandler.GetSong(id);
-
-                if (song == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("No song found");
-                    return NotFound(_response);
-                }
-
-                var similarSong = _dataHandler.GetSimilar(song);
-
-                if (similarSong == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("No similar song found");
-                    return NotFound(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = similarSong;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting song");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error getting song");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-
-            return Ok(_response);
-        }
-
-        [HttpGet]
-        [Route("similarList/{id:guid}", Name = "GetSimilarSongList")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> GetSimilarSongList(Guid id)
-        {
-            try
-            {
-                var song = _dataHandler.GetSong(id);
-
-                if (song == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Song not found");
-                    return NotFound(_response);
-                }
-
-                var songs = _dataHandler.GetSimilarList(song);
-
-                if (songs == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("No similar songs found");
-                    return NotFound(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = songs;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting songs");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error getting songs");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-
-            return Ok(_response);
-        }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -336,7 +250,7 @@ namespace LiStreamAPI.Controllers
 
                 var songDto = _mapper.Map<SongDto>(songCreateDto);
 
-                var success = _dataHandler.InsertSong(songDto);
+                var success = _dataHandler.CreateSong(songDto);
 
                 if (success == false)
                 {
@@ -440,6 +354,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.Result = success;
+                _response.StatusCode = HttpStatusCode.NoContent;
                 return Ok(_response);
             }
             catch (Exception ex)

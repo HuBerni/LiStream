@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LiStream.DtoHandler
+namespace LiStream.DtoHandler.Interfaces
 {
     public interface IDtoHandler
     {
@@ -20,7 +20,7 @@ namespace LiStream.DtoHandler
         IPlaylist ToPlaylist(PlaylistDto playlistDto);
         ArtistDto ToDto(IArtistProfile artist);
         IArtistProfile ToArtist(ArtistDto artistDto);
-        PlayableCollectionDto ToDto(IPlayable playableCollectionDto);
+        PlayableCollectionDto ToDto(IPlayableCollection playableCollectionDto);
         IPlayableCollection ToPlayableCollection(PlayableCollectionDto playableCollectionDto);
         SongDto ToDto(ISong song);
         ISong ToSong(SongDto songDto);

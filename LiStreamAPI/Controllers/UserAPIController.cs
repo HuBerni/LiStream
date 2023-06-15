@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using LiStream.DataHandler.Interfaces;
-using LiStream.User.Interfaces.Profile;
+using LiStream.DataHandler;
+using LiStream.DtoHandler.Interfaces;
 using LiStreamAPI.Models;
 using LiStreamData.DTO;
 using LiStreamData.DTOs.CreateDTOs;
@@ -16,13 +16,15 @@ namespace LiStreamAPI.Controllers
     {
         private APIResponse _response;
         private readonly ILogger<UserAPIController> _logger;
-        private readonly IDataHandler _dataHandler;
+        private readonly UserFactory _userFactory;
+        private readonly IDtoHandler _dtoHandler;
         private readonly IMapper _mapper;
 
-        public UserAPIController(ILogger<UserAPIController> logger, IDataHandler dataHandler, IMapper mapper)
+        public UserAPIController(ILogger<UserAPIController> logger, UserFactory userFactory, IDtoHandler dtoHandler, IMapper mapper)
         {
             _logger = logger;
-            _dataHandler = dataHandler;
+            _userFactory = userFactory;
+            _dtoHandler = dtoHandler;
             _mapper = mapper;
             _response = new();
         }
@@ -34,7 +36,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var users = _dataHandler.GetUserProfiles();
+                var users = _userFactory.GetAll().Select(_dtoHandler.ToDto).ToList();
 
                 if (users == null)
                 {
@@ -67,7 +69,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var user = _dataHandler.GetUserProfile(id);
+                var user = _dtoHandler.ToDto(_userFactory.Get(id));
 
                 if (user == null)
                 {
@@ -118,7 +120,7 @@ namespace LiStreamAPI.Controllers
 
                 var userDto = _mapper.Map<UserDto>(userCreateDto);
 
-                var success = _dataHandler.InsertUser(userDto);
+                var success = _userFactory.Create(userDto);
 
                 if (success == false)
                 {
@@ -169,7 +171,7 @@ namespace LiStreamAPI.Controllers
                 var userDto = _mapper.Map<UserDto>(userUpdateDto);
                 userDto.Id = id;
 
-                var success = _dataHandler.UpdateUserProfile(userDto);
+                var success = _userFactory.Update(userDto);
 
                 if (success == false)
                 {
@@ -201,7 +203,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var user = _dataHandler.GetUserProfile(id);
+                var user = _userFactory.Get(id);
 
                 if (user == null)
                 {
@@ -211,7 +213,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var success = _dataHandler.DeleteUser(id);
+                var success = _userFactory.Delete(id);
 
                 if (success == false)
                 {

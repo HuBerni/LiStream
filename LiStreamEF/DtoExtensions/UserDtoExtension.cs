@@ -21,7 +21,7 @@ namespace LiStreamEF.DTO
                 userDto.Playlists = user.Playlists?.ToPlaylistDto();
 
             if (mapFollowedCollections)
-                userDto.FollowedPlayableCollections = user.UserFollowedPlayableCollections.Select(x => x.ToPlayableCollectionDto()).ToList();
+                userDto.FollowedPlayableCollections = user.UserFollowedPlayableCollections.Select(x => x.ToPlayableCollectionDto(mapAlbumOrPlaylist: true)).ToList();
 
             return userDto;
         }

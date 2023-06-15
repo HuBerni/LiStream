@@ -44,6 +44,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
+                _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = artists;
             }
             catch (Exception ex)
@@ -76,6 +77,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
+                _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = artist;
             }
             catch (Exception ex)
@@ -90,91 +92,7 @@ namespace LiStreamAPI.Controllers
             return Ok(_response);
         }
 
-        [HttpGet]
-        [Route("similar/{id:guid}", Name = "GetSimilarArtist")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> GetSimilarArtist(Guid id)
-        {
-            try
-            {
-                var artist = _dataHandler.GetArtistProfile(id);
-
-                if (artist == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Artist not found");
-                    return NotFound(_response);
-                }
-
-                var similarArtist = _dataHandler.GetSimilar(artist);
-
-                if (similarArtist == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("No similar artist found");
-                    return NotFound(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = similarArtist;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting artist");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error getting artist");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-
-            return Ok(_response);
-        }
-
-        [HttpGet]
-        [Route("similarList/{id:guid}", Name = "GetSimilarArtistList")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> GetSimilarArtistList(Guid id)
-        {
-            try
-            {
-                var artist = _dataHandler.GetArtistProfile(id);
-
-                if (artist == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Artist not found");
-                    return NotFound(_response);
-                }
-
-                var artists = _dataHandler.GetSimilarList(artist);
-
-                if (artists == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("No similar artists found");
-                    return NotFound(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = artists;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting artists");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error getting artists");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-
-            return Ok(_response);
-        }
+        
 
 
         [HttpPost]
@@ -203,7 +121,7 @@ namespace LiStreamAPI.Controllers
 
                 var artistDto = _mapper.Map<ArtistDto>(artistCreateDto);
 
-                var success = _dataHandler.InsertArtist(artistDto);
+                var success = _dataHandler.CreateArtist(artistDto);
 
                 if (success == false)
                 {

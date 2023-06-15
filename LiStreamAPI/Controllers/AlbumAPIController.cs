@@ -5,7 +5,6 @@ using LiStreamData.DTO;
 using LiStreamData.DTOs.CreateDTOs;
 using LiStreamData.DTOs.UpdateDTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.Net;
 
 namespace LiStreamAPI.Controllers
@@ -44,6 +43,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
+                _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = albums;
             }
             catch (Exception ex)
@@ -201,7 +201,7 @@ namespace LiStreamAPI.Controllers
 
                 var albumDto = _mapper.Map<AlbumDto>(albumCreateDto);
 
-                var success = _dataHandler.InsertAlbum(albumDto);
+                var success = _dataHandler.CreateAlbum(albumDto);
 
                 if (success == false)
                 {

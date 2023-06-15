@@ -4,11 +4,11 @@ namespace LiStreamData.Interfaces
 {
     public interface IDataWriter
     {
-        bool InsertArtist(ArtistDto artist);
-        bool InsertUser (UserDto user);
-        bool InsertAlbum(AlbumDto album);
-        bool InsertPlaylist(PlaylistDto playlist);
-        bool InsertSong(SongDto song);
+        bool CreateArtist(ArtistDto artist);
+        bool CreateUser (UserDto user);
+        bool CreateAlbum(AlbumDto album);
+        bool CreatePlaylist(PlaylistDto playlist);
+        bool CreateSong(SongDto song);
         bool InsertSongToPlaylist(Guid songID, Guid playlistID, Guid userID);
         bool InsertSongToAlbum(Guid songID, Guid albumID);
         bool InsertSongToUserFavorites(Guid songID, Guid userID);

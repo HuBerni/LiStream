@@ -1,6 +1,7 @@
 using LiStream.DataHandler;
 using LiStream.DataHandler.Interfaces;
 using LiStream.DtoHandler;
+using LiStream.DtoHandler.Interfaces;
 using LiStream.Evaluators;
 using LiStream.Evaluators.Interfaces;
 using LiStreamAPI;
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IDataReader, DataReader>();
 builder.Services.AddScoped<IDataHandler, DataHandler>();
 builder.Services.AddSingleton<IDtoHandler, DtoHandler>();
 builder.Services.AddSingleton<IEvaluator, Evaluator>();
+
+builder.Services.AddScoped<UserFactory>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 

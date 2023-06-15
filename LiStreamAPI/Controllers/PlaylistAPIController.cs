@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LiStream.DataHandler.Interfaces;
-using LiStream.DtoHandler;
+using LiStream.DtoHandler.Interfaces;
 using LiStreamAPI.Models;
 using LiStreamData.DTO;
 using LiStreamData.DTOs.CreateDTOs;
@@ -155,7 +155,7 @@ namespace LiStreamAPI.Controllers
 
                 var playlistDto = _mapper.Map<PlaylistDto>(playlistCreateDto);
 
-                var success = _dataHandler.InsertPlaylist(playlistDto);
+                var success = _dataHandler.CreatePlaylist(playlistDto);
 
                 if (success == false)
                 {

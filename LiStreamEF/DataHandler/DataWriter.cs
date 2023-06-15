@@ -1,6 +1,5 @@
 ﻿using LiStreamData.DTO;
 using LiStreamData.Interfaces;
-using LiStreamEF.DTO;
 using LiStreamEF.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -182,7 +181,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertAlbum(AlbumDto album)
+        public bool CreateAlbum(AlbumDto album)
         {
             try
             {
@@ -205,7 +204,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertArtist(ArtistDto artist)
+        public bool CreateArtist(ArtistDto artist)
         {
             try
             {
@@ -265,7 +264,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertPlaylist(PlaylistDto playlist)
+        public bool CreatePlaylist(PlaylistDto playlist)
         {
             try
             {
@@ -288,7 +287,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertSong(SongDto song)
+        public bool CreateSong(SongDto song)
         {
             try
             {
@@ -386,7 +385,7 @@ namespace LiStreamEF
             return true;
         }
 
-        public bool InsertUser(UserDto user)
+        public bool CreateUser(UserDto user)
         {
             try
             {

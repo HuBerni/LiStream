@@ -196,6 +196,7 @@ namespace LiStreamEF
                 .Include(x => x.UserFavoriteSongs)
                 .ThenInclude(x => x.Song)
                 .Include(x => x.UserFollowedPlayableCollections)
+                .ThenInclude(x => x.Album)
                 .Include(x => x.Playlists)
                 .ThenInclude(x => x.PlaylistItems)
                 .ThenInclude(x => x.Song)

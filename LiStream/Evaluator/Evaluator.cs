@@ -1,11 +1,6 @@
 ﻿using LiStream.Evaluators.Interfaces;
 using LiStream.Playables.Interfaces;
 using LiStream.User.Interfaces.Profile;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiStream.Evaluators
 {
@@ -53,12 +48,17 @@ namespace LiStream.Evaluators
 
         public IPlayableCollection GetSimilar(IPlayableCollection collection, IList<IPlayableCollection> toCompare)
         {
-            throw new NotImplementedException();
+            var rand = new Random();
+            var compList = toCompare.ToList();
+            compList.Remove(compList.FirstOrDefault(x => x.Id.Equals(collection.Id)));
+            return compList[rand.Next(0, compList.Count)];
         }
 
         public IList<IPlayableCollection> GetSimilarList(IPlayableCollection collection, IList<IPlayableCollection> toCompare)
         {
-            throw new NotImplementedException();
+            var compList = toCompare.ToList();
+            compList.Remove(compList.FirstOrDefault(x => x.Id.Equals(collection.Id)));
+            return compList.OrderBy(x => Guid.NewGuid()).Take(3).ToList();
         }
 
         public IArtistProfile GetSimilar(IArtistProfile artist, IList<IArtistProfile> toCompare)

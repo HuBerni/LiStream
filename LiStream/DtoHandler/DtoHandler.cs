@@ -1,29 +1,24 @@
-﻿using LiStream.Playables;
+﻿using LiStream.DtoHandler.Interfaces;
+using LiStream.Playables;
 using LiStream.Playables.Interfaces;
 using LiStream.User;
 using LiStream.User.Interfaces;
 using LiStream.User.Interfaces.Profile;
 using LiStreamData.DTO;
-using LiStreamEF.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiStream.DtoHandler
 {
     public class DtoHandler : IDtoHandler
     {
-        public PlayableCollectionDto ToDto(IPlayable playableCollectionDto)
+        public PlayableCollectionDto ToDto(IPlayableCollection playableCollection)
         {
             var dto = new PlayableCollectionDto();
-            dto.Id = playableCollectionDto.Id;
+            dto.Id = playableCollection.Id;
 
-            if (playableCollectionDto is IAlbum album)
+            if (playableCollection is IAlbum album)
                 dto.Album = ToDto(album);
 
-            if (playableCollectionDto is IPlaylist playlist)
+            if (playableCollection is IPlaylist playlist)
                 dto.Playlist = ToDto(playlist);
 
             return dto;
@@ -121,8 +116,9 @@ namespace LiStream.DtoHandler
                 Id = user.Id,
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Playlists = null,
-                FollowedPlayableCollections = user.FollowedPlayableCollections is not null ? user.FollowedPlayableCollections.Select(p => ToDto(p)).ToList() : null
+                Playlists = user.Playlists?.Select(ToDto).ToList(),
+                FavoritePlayables = user is IUser iuser ? iuser.FavoritePlayables?.Select(x => ToDto((ISong)x)).ToList() : null,
+                FollowedPlayableCollections = user.FollowedPlayableCollections?.Select(ToDto).ToList()
             };
 
             return userDto;
@@ -163,10 +159,10 @@ namespace LiStream.DtoHandler
         public IUserProfile ToUser(UserDto userDto)
         {
             var favPlayables = userDto.FavoritePlayables?.Select(x => ToSong(x)).ToList<IPlayable>();
-            //var followedCollections = userDto.FollowedPlayableCollections?.Select(x => ToPlayableCollection(x)).ToList();
             var playlists = userDto.Playlists?.Select(x => ToPlaylist(x)).ToList();
+            var followedCollections = userDto.FollowedPlayableCollections?.Select(ToPlayableCollection).ToList();
 
-            var user = new User.User(userDto.Id, favPlayables, null, playlists, userDto.DisplayName, userDto.Email);
+            var user = new User.User(userDto.Id, favPlayables, followedCollections, playlists, userDto.DisplayName, userDto.Email);
 
             return user;
         }
