@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LiStream.DataHandler;
 using LiStream.DataHandler.Interfaces;
+using LiStream.DtoHandler.Interfaces;
 using LiStream.Evaluators.Interfaces;
 using LiStreamAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace LiStreamAPI.Controllers
         private APIResponse _response;
         private readonly ILogger<EvaluatorAPIController> _logger;
         private readonly IDataHandler _dataHandler;
+        private readonly IDtoHandler _dtoHandler;
 
-        public EvaluatorAPIController(ILogger<EvaluatorAPIController> logger, IDataHandler dataHandler)
+        public EvaluatorAPIController(ILogger<EvaluatorAPIController> logger, IDataHandler dataHandler, IDtoHandler dtoHandler)
         {
             _logger = logger;
             _dataHandler = dataHandler;
+            _dtoHandler = dtoHandler;
             _response = new();
         }
 
@@ -41,7 +44,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var similarSong = _dataHandler.GetSimilar(song);
+                var similarSong = _dtoHandler.ToDto(_dataHandler.GetSimilar(song));
 
                 if (similarSong == null)
                 {
@@ -85,7 +88,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var songs = _dataHandler.GetSimilarList(song);
+                var songs = _dataHandler.GetSimilarList(song).Select(_dtoHandler.ToDto);
 
                 if (songs == null)
                 {
@@ -128,7 +131,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var similarArtist = _dataHandler.GetSimilar(artist);
+                var similarArtist = _dtoHandler.ToDto(_dataHandler.GetSimilar(artist));
 
                 if (similarArtist == null)
                 {
@@ -171,7 +174,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var artists = _dataHandler.GetSimilarList(artist);
+                var artists = _dataHandler.GetSimilarList(artist).Select(_dtoHandler.ToDto);
 
                 if (artists == null)
                 {

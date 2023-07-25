@@ -6,7 +6,7 @@ namespace LiStream.Evaluators
 {
     public class Evaluator : IEvaluator
     {
-        private const double _similarityThreshold = 0.005;
+        private const double _similarityThreshold = 0.0045;
 
         public ISong GetSimilar(ISong song, IList<ISong> toCompare)
         {

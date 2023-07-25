@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Azure;
+using LiStream.DataHandler;
 using LiStream.DataHandler.Interfaces;
+using LiStream.DtoHandler.Interfaces;
 using LiStreamAPI.Models;
 using LiStreamData.DTO;
 using LiStreamData.DTOs.CreateDTOs;
@@ -16,13 +18,15 @@ namespace LiStreamAPI.Controllers
     {
         private APIResponse _response;
         private readonly ILogger<ArtistAPIController> _logger;
-        private readonly IDataHandler _dataHandler;
+        private readonly ArtistHandler _artistHandler;
+        private readonly IDtoHandler _dtoHandler;
         private readonly IMapper _mapper;
 
-        public ArtistAPIController(ILogger<ArtistAPIController> logger, IDataHandler dataHandler, IMapper mapper)
+        public ArtistAPIController(ILogger<ArtistAPIController> logger, ArtistHandler artistHandler, IDtoHandler dtoHandler, IMapper mapper)
         {
             _logger = logger;
-            _dataHandler = dataHandler;
+            _artistHandler = artistHandler;
+            _dtoHandler = dtoHandler;
             _mapper = mapper;
             _response = new();
         }
@@ -34,9 +38,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var artists = _dataHandler.GetArtistProfiles();
+                var artistDtos = _artistHandler.GetAll().Select(_dtoHandler.ToDto);
 
-                if (artists == null)
+                if (artistDtos == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -45,7 +49,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = artists;
+                _response.Result = artistDtos;
             }
             catch (Exception ex)
             {
@@ -67,9 +71,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var artist = _dataHandler.GetArtistProfile(id);
+                var artistDto = _dtoHandler.ToDto(_artistHandler.Get(id));
 
-                if (artist == null)
+                if (artistDto == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -78,7 +82,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = artist;
+                _response.Result = artistDto;
             }
             catch (Exception ex)
             {
@@ -121,7 +125,7 @@ namespace LiStreamAPI.Controllers
 
                 var artistDto = _mapper.Map<ArtistDto>(artistCreateDto);
 
-                var success = _dataHandler.CreateArtist(artistDto);
+                var success = _artistHandler.Create(artistDto);
 
                 if (success == false)
                 {
@@ -172,7 +176,7 @@ namespace LiStreamAPI.Controllers
                 var artistDto = _mapper.Map<ArtistDto>(artistUpdateDto);
                 artistDto.Id = id;
 
-                var success = _dataHandler.UpdateArtist(artistDto);
+                var success = _artistHandler.Update(artistDto);
 
                 if (success == false)
                 {
@@ -204,7 +208,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var artist = _dataHandler.GetArtistProfile(id);
+                var artist = _artistHandler.Get(id);
 
                 if (artist == null)
                 {
@@ -214,7 +218,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var success = _dataHandler.DeleteArtist(id);
+                var success = _artistHandler.Delete(id);
 
                 if (success == false)
                 {

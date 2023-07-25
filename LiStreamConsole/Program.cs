@@ -53,16 +53,16 @@ var displayableMethodsMap = new Dictionary<MenuOption, Func<IDisplayable, IList<
     { MenuOption.Songs, displayable =>
         displayable switch
         {
-            IPlaylist playlist => dataHandler.GetPlaylistSongs(playlist.Id).OfType<IDisplayable>().ToList(),
-            IAlbum album => dataHandler.GetAlbumSongs(album.Id).OfType<IDisplayable>().ToList(),
-            IArtistProfile artist => dataHandler.GetArtistSongs(artist.Id).OfType<IDisplayable>().ToList(),
+            IPlaylist playlist => dataHandler.GetSongsByPlaylist(playlist.Id).OfType<IDisplayable>().ToList(),
+            IAlbum album => dataHandler.GetSongsByAlbum(album.Id).OfType<IDisplayable>().ToList(),
+            IArtistProfile artist => dataHandler.GetSongsByArtist(artist.Id).OfType<IDisplayable>().ToList(),
             _ => new List<IDisplayable>()
         }
     },
     { MenuOption.Albums, displayable =>
         displayable switch
         {
-          IArtistProfile artist => dataHandler.GetArtistAlbums(artist.Id).OfType<IDisplayable>().ToList(),
+          IArtistProfile artist => dataHandler.GetAlbumsByArtist(artist.Id).OfType<IDisplayable>().ToList(),
           _ => new List<IDisplayable>()
         }
     }

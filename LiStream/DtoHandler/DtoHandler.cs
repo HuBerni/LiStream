@@ -13,6 +13,10 @@ namespace LiStream.DtoHandler
         public PlayableCollectionDto ToDto(IPlayableCollection playableCollection)
         {
             var dto = new PlayableCollectionDto();
+
+            if (playableCollection is null)
+                return dto;
+
             dto.Id = playableCollection.Id;
 
             if (playableCollection is IAlbum album)
@@ -131,7 +135,12 @@ namespace LiStream.DtoHandler
                 return ToPlaylist(playableCollectionDto.Playlist);
             }
 
-            return ToAlbum(playableCollectionDto.Album);
+            if (playableCollectionDto.Album is not null)
+            {
+                return ToAlbum(playableCollectionDto.Album);
+            }
+
+            return null;
         }
 
 

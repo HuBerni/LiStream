@@ -4,11 +4,11 @@ using LiStreamData.DTO;
 
 namespace LiStream.DataHandler
 {
-    public class AlbumFactory : IDataFactory<IAlbum, AlbumDto>
+    public class AlbumHandler : IDataItemHandler<IAlbum, AlbumDto>
     {
         private readonly IDataHandler _dataHandler;
 
-        public AlbumFactory(IDataHandler dataHandler)
+        public AlbumHandler(IDataHandler dataHandler)
         {
             _dataHandler = dataHandler;
         }
@@ -36,6 +36,11 @@ namespace LiStream.DataHandler
         public bool Delete(Guid id)
         {
             return _dataHandler.DeleteAlbum(id);
+        }
+
+        public IList<IAlbum> GetAlbumsByArtist(Guid artistId)
+        {
+            return _dataHandler.GetAlbumsByArtist(artistId);
         }
     }
 }

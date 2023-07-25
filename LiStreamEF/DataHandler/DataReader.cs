@@ -179,6 +179,21 @@ namespace LiStreamEF
             return songs.ToSongDto(true, true);
         }
 
+        public UserDto GetUserByEmail(string email)
+        {
+            var user = _context.Users
+                .Include(x => x.UserFavoriteSongs)
+                .ThenInclude(x => x.Song)
+                .Include(x => x.UserFollowedPlayableCollections)
+                .ThenInclude(x => x.Album)
+                .Include(x => x.Playlists)
+                .ThenInclude(x => x.PlaylistItems)
+                .ThenInclude(x => x.Song)
+                .FirstOrDefault(u => u.Email.Equals(email));
+
+            return user?.ToUserDto(true, true, false);
+        }
+
         public IList<PlaylistDto> GetUserPlaylists(Guid userID)
         {
             var playlists = _context.Playlists
@@ -202,7 +217,7 @@ namespace LiStreamEF
                 .ThenInclude(x => x.Song)
                 .FirstOrDefault(u => u.UserId.Equals(userID));
 
-            return user.ToUserDto(true, true, true);
+            return user.ToUserDto(true, true, false);
         }
 
         public IList<UserDto> GetUserProfiles()

@@ -4,11 +4,11 @@ using LiStreamData.DTO;
 
 namespace LiStream.DataHandler
 {
-    public class PlaylistFactory : IDataFactory<IPlaylist, PlaylistDto>
+    public class PlaylistHandler : IDataItemHandler<IPlaylist, PlaylistDto>
     {
         private readonly IDataHandler _dataHandler;
 
-        public PlaylistFactory(IDataHandler dataHandler)
+        public PlaylistHandler(IDataHandler dataHandler)
         {
             _dataHandler = dataHandler;
         }
@@ -36,6 +36,11 @@ namespace LiStream.DataHandler
         public bool Update(PlaylistDto dto)
         {
             return _dataHandler.UpdatePlaylist(dto);
+        }
+
+        public IList<IPlaylist> GetPlaylistsByUser(Guid userId)
+        {
+            return _dataHandler.GetPlaylistsByUser(userId);
         }
     }
 }

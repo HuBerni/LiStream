@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LiStream.DataHandler;
 using LiStream.DataHandler.Interfaces;
 using LiStream.DtoHandler.Interfaces;
 using LiStreamAPI.Models;
@@ -16,14 +17,14 @@ namespace LiStreamAPI.Controllers
     {
         private APIResponse _response;
         private readonly ILogger<PlaylistAPIController> _logger;
-        private readonly IDataHandler _dataHandler;
-        private readonly IMapper _mapper;
+        private readonly PlaylistHandler _playlistHandler;
         private readonly IDtoHandler _dtoHandler;
+        private readonly IMapper _mapper;
 
-        public PlaylistAPIController(ILogger<PlaylistAPIController> logger, IDataHandler dataHandler, IMapper mapper, IDtoHandler dtoHandler)
+        public PlaylistAPIController(ILogger<PlaylistAPIController> logger, PlaylistHandler playlistHandler, IMapper mapper, IDtoHandler dtoHandler)
         {
             _logger = logger;
-            _dataHandler = dataHandler;
+            _playlistHandler = playlistHandler;
             _mapper = mapper;
             _dtoHandler = dtoHandler;
             _response = new();
@@ -36,10 +37,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var playlists = _dataHandler.GetPlaylists();
-                var playlistDtos = playlists.Select(x => _dtoHandler.ToDto(x)).ToList();
+                var playlistDtos = _playlistHandler.GetAll().Select(_dtoHandler.ToDto).ToList();
 
-                if (playlists == null)
+                if (playlistDtos == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -70,10 +70,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var playlist = _dataHandler.GetPlaylist(id);
-                var playlistDto = _dtoHandler.ToDto(playlist);
+                var playlistDto = _dtoHandler.ToDto(_playlistHandler.Get(id));
 
-                if (playlist == null)
+                if (playlistDto == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -104,9 +103,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var playlists = _dataHandler.GetUserPlaylists(id);
+                var playlistDtos = _playlistHandler.GetPlaylistsByUser(id).Select(_dtoHandler.ToDto);
 
-                if (playlists == null)
+                if (playlistDtos == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -115,7 +114,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = playlists;
+                _response.Result = playlistDtos;
             }
             catch (Exception ex)
             {
@@ -155,7 +154,7 @@ namespace LiStreamAPI.Controllers
 
                 var playlistDto = _mapper.Map<PlaylistDto>(playlistCreateDto);
 
-                var success = _dataHandler.CreatePlaylist(playlistDto);
+                var success = _playlistHandler.Create(playlistDto);
 
                 if (success == false)
                 {
@@ -175,52 +174,6 @@ namespace LiStreamAPI.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages.Add("Error adding playlist");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id:guid}/song/{songId:guid}/user/{userId:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<APIResponse> AddSongToPlaylist(Guid id, Guid songId, Guid userId)
-        {
-            try
-            {
-                var playlist = _dataHandler.GetPlaylist(id);
-
-                var song = _dataHandler.GetSong(songId);
-
-                var user = _dataHandler.GetUserProfile(userId);
-
-                if (playlist == null || song == null || user == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages.Add("Invalid playlist, song or user");
-                    return BadRequest(_response);
-                }
-
-                var success = _dataHandler.InsertSongToPlaylist(songId, id, userId);
-
-                if (success == false)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.InternalServerError;
-                    _response.ErrorMessages.Add("Error adding song to playlist");
-                    return StatusCode((int)_response.StatusCode, _response);
-                }
-
-                _response.Result = success;
-                _response.StatusCode = HttpStatusCode.Created;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error adding song to playlist");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error adding song to playlist");
                 return StatusCode((int)_response.StatusCode, _response);
             }
         }
@@ -252,7 +205,7 @@ namespace LiStreamAPI.Controllers
                 var playlistDto = _mapper.Map<PlaylistDto>(playlistUpdateDto);
                 playlistDto.Id = id;
 
-                var success = _dataHandler.UpdatePlaylist(playlistDto);
+                var success = _playlistHandler.Update(playlistDto);
 
                 if (success == false)
                 {
@@ -284,7 +237,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var playlist = _dataHandler.GetPlaylist(id);
+                var playlist = _playlistHandler.Get(id);
 
                 if (playlist == null)
                 {
@@ -294,7 +247,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var success = _dataHandler.DeletePlaylist(id);
+                var success = _playlistHandler.Delete(id);
 
                 if (success == false)
                 {
@@ -317,51 +270,6 @@ namespace LiStreamAPI.Controllers
                 return StatusCode((int)_response.StatusCode, _response);
             }
         }
-
-        [HttpDelete]
-        [Route("{id:guid}/song/{songId:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> DeleteSongFromPlaylist(Guid id, Guid songId)
-        {
-            try
-            {
-                var playlist = _dataHandler.GetPlaylist(id);
-
-                var song = _dataHandler.GetSong(songId);
-
-                if (playlist == null || song == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("No playlist or song found");
-                    return NotFound(_response);
-                }
-
-                var success = _dataHandler.DeleteSongFromPlaylist(songId, id);
-
-                if (success == false)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.InternalServerError;
-                    _response.ErrorMessages.Add("Error deleting song from playlist");
-                    return StatusCode((int)_response.StatusCode, _response);
-                }
-
-                _response.Result = success;
-                _response.StatusCode = HttpStatusCode.NoContent;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error deleting song from playlist");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error deleting song from playlist");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-        }
-
     }
 }
 

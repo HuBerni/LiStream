@@ -1,6 +1,6 @@
 ﻿namespace LiStream.DataHandler.Interfaces
 {
-    public interface IDataFactory<TEntity, TDto> where TEntity : class where TDto : class
+    public interface IDataItemHandler<TEntity, TDto> where TEntity : class where TDto : class
     {
         IList<TEntity> GetAll();
         TEntity Get(Guid id);

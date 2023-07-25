@@ -16,6 +16,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure the database provider and connection string
 builder.Services.AddDbContext<LiStreamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Register services
 builder.Services.AddScoped<IDataWriter, DataWriter>();
 builder.Services.AddScoped<IDataReader, DataReader>();
@@ -23,7 +34,11 @@ builder.Services.AddScoped<IDataHandler, DataHandler>();
 builder.Services.AddSingleton<IDtoHandler, DtoHandler>();
 builder.Services.AddSingleton<IEvaluator, Evaluator>();
 
-builder.Services.AddScoped<UserFactory>();
+builder.Services.AddScoped<AlbumHandler>();
+builder.Services.AddScoped<ArtistHandler>();
+builder.Services.AddScoped<PlaylistHandler>();
+builder.Services.AddScoped<SongHandler>();
+builder.Services.AddScoped<UserHandler>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -40,6 +55,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder =>
+{
+    builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+});
 
 app.UseHttpsRedirection();
 

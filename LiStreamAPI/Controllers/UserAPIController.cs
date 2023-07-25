@@ -16,14 +16,14 @@ namespace LiStreamAPI.Controllers
     {
         private APIResponse _response;
         private readonly ILogger<UserAPIController> _logger;
-        private readonly UserFactory _userFactory;
+        private readonly UserHandler _userHandler;
         private readonly IDtoHandler _dtoHandler;
         private readonly IMapper _mapper;
 
-        public UserAPIController(ILogger<UserAPIController> logger, UserFactory userFactory, IDtoHandler dtoHandler, IMapper mapper)
+        public UserAPIController(ILogger<UserAPIController> logger, UserHandler userHandler, IDtoHandler dtoHandler, IMapper mapper)
         {
             _logger = logger;
-            _userFactory = userFactory;
+            _userHandler = userHandler;
             _dtoHandler = dtoHandler;
             _mapper = mapper;
             _response = new();
@@ -36,9 +36,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var users = _userFactory.GetAll().Select(_dtoHandler.ToDto).ToList();
+                var userDtos = _userHandler.GetAll().Select(_dtoHandler.ToDto).ToList();
 
-                if (users == null)
+                if (userDtos == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -47,7 +47,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = users;
+                _response.Result = userDtos;
             }
             catch (Exception ex)
             {
@@ -69,9 +69,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var user = _dtoHandler.ToDto(_userFactory.Get(id));
+                var userDto = _dtoHandler.ToDto(_userHandler.Get(id));
 
-                if (user == null)
+                if (userDto == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -80,7 +80,42 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = user;
+                _response.Result = userDto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting user");
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages.Add("Error getting user");
+                return StatusCode((int)_response.StatusCode, _response);
+            }
+
+            return Ok(_response);
+        }
+
+        [HttpGet]
+        [Route("email/{email}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<APIResponse> GetUserByEmail(string email)
+        {
+            try
+            {
+                var user = _userHandler.GetUserByEmail(email);
+
+                if (user == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.ErrorMessages.Add("User with email not found");
+                    return NotFound(_response);
+                }
+
+                var userDto = _dtoHandler.ToDto(user);
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = userDto;
             }
             catch (Exception ex)
             {
@@ -120,7 +155,7 @@ namespace LiStreamAPI.Controllers
 
                 var userDto = _mapper.Map<UserDto>(userCreateDto);
 
-                var success = _userFactory.Create(userDto);
+                var success = _userHandler.Create(userDto);
 
                 if (success == false)
                 {
@@ -148,6 +183,7 @@ namespace LiStreamAPI.Controllers
         [Route("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ResponseCache(Duration = 300)]
         public ActionResult<APIResponse> UpdateUser(Guid id, [FromBody] UserUpdateDto userUpdateDto)
         {
             try
@@ -171,7 +207,7 @@ namespace LiStreamAPI.Controllers
                 var userDto = _mapper.Map<UserDto>(userUpdateDto);
                 userDto.Id = id;
 
-                var success = _userFactory.Update(userDto);
+                var success = _userHandler.Update(userDto);
 
                 if (success == false)
                 {
@@ -203,7 +239,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var user = _userFactory.Get(id);
+                var user = _userHandler.Get(id);
 
                 if (user == null)
                 {
@@ -213,7 +249,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var success = _userFactory.Delete(id);
+                var success = _userHandler.Delete(id);
 
                 if (success == false)
                 {

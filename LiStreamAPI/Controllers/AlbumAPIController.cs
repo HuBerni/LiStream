@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using LiStream.DataHandler;
 using LiStream.DataHandler.Interfaces;
+using LiStream.DtoHandler.Interfaces;
 using LiStreamAPI.Models;
 using LiStreamData.DTO;
 using LiStreamData.DTOs.CreateDTOs;
@@ -15,13 +17,15 @@ namespace LiStreamAPI.Controllers
     {
         private APIResponse _response;
         private readonly ILogger<AlbumAPIController> _logger;
-        private readonly IDataHandler _dataHandler;
+        private readonly AlbumHandler _albumHandler;
+        private readonly IDtoHandler _dtoHandler;
         private readonly IMapper _mapper;
 
-        public AlbumAPIController(ILogger<AlbumAPIController> logger, IDataHandler dataHandler, IMapper mapper)
+        public AlbumAPIController(ILogger<AlbumAPIController> logger, AlbumHandler albumHandler, IDtoHandler dtoHandler, IMapper mapper)
         {
             _logger = logger;
-            _dataHandler = dataHandler;
+            _albumHandler = albumHandler;
+            _dtoHandler = dtoHandler;
             _mapper = mapper;
             _response = new();
         }
@@ -33,9 +37,10 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var albums = _dataHandler.GetAlbums();
+                var albumDtos = _albumHandler.GetAll().Select(_dtoHandler.ToDto);
 
-                if (albums == null)
+
+                if (albumDtos == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -44,7 +49,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = albums;
+                _response.Result = albumDtos;
             }
             catch (Exception ex)
             {
@@ -66,9 +71,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var album = _dataHandler.GetAlbum(id);
+                var albumDto = _dtoHandler.ToDto(_albumHandler.Get(id));
 
-                if (album == null)
+                if (albumDto == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -77,7 +82,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = album;
+                _response.Result = albumDto;
             }
             catch (Exception ex)
             {
@@ -85,57 +90,6 @@ namespace LiStreamAPI.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages.Add("Error getting album");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-
-            return Ok(_response);
-        }
-
-        [HttpDelete]
-        [Route("/song/{songID:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> RemoveSongFromAlbum(Guid songID)
-        {
-            try
-            {
-                var song = _dataHandler.GetSong(songID);
-
-                if (song == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Song not found");
-                    return NotFound(_response);
-                }
-
-                if (song.Album.Id == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Song is not in an album");
-                    return NotFound(_response);
-                }   
-
-                var success = _dataHandler.DeleteSongFromAlbum(songID);
-
-                if (success == false)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Error removing song from album");
-                    return NotFound(_response);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = success;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error removing song from album");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error removing song from album");
                 return StatusCode((int)_response.StatusCode, _response);
             }
 
@@ -150,9 +104,9 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var albums = _dataHandler.GetArtistAlbums(id);
+                var albumDtos = _albumHandler.GetAlbumsByArtist(id).Select(_dtoHandler.ToDto);
 
-                if (albums == null)
+                if (albumDtos == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -161,7 +115,7 @@ namespace LiStreamAPI.Controllers
                 }
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = albums;
+                _response.Result = albumDtos;
             }
             catch (Exception ex)
             {
@@ -201,7 +155,7 @@ namespace LiStreamAPI.Controllers
 
                 var albumDto = _mapper.Map<AlbumDto>(albumCreateDto);
 
-                var success = _dataHandler.CreateAlbum(albumDto);
+                var success = _albumHandler.Create(albumDto);
 
                 if (success == false)
                 {
@@ -221,59 +175,6 @@ namespace LiStreamAPI.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages.Add("Error adding album");
-                return StatusCode((int)_response.StatusCode, _response);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id:guid}/song/{songId:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<APIResponse> AddSongToAlbum(Guid id, Guid songId)
-        {
-            try
-            {
-                var song = _dataHandler.GetSong(songId);
-                
-                if (song.Album != null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages.Add("Song already has an album");
-                    return BadRequest(_response);
-                }
-                
-                var album = _dataHandler.GetAlbum(id);
-
-                if (album == null || song == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages.Add("Album or song not found");
-                    return NotFound(_response);
-                }
-
-                var success = _dataHandler.InsertSongToAlbum(songId, id);
-
-                if (success == false)
-                {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.InternalServerError;
-                    _response.ErrorMessages.Add("Error adding song to album");
-                    return StatusCode((int)_response.StatusCode, _response);
-                }
-
-                _response.Result = success;
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error adding song to album");
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages.Add("Error adding song to album");
                 return StatusCode((int)_response.StatusCode, _response);
             }
         }
@@ -305,7 +206,7 @@ namespace LiStreamAPI.Controllers
                 var albumDto = _mapper.Map<AlbumDto>(albumUpdateDto);
                 albumDto.Id = id;
 
-                var success = _dataHandler.UpdateAlbum(albumDto);
+                var success = _albumHandler.Update(albumDto);
 
                 if (success == false)
                 {
@@ -337,7 +238,7 @@ namespace LiStreamAPI.Controllers
         {
             try
             {
-                var album = _dataHandler.GetAlbum(id);
+                var album = _albumHandler.Get(id);
 
                 if (album == null)
                 {
@@ -347,7 +248,7 @@ namespace LiStreamAPI.Controllers
                     return NotFound(_response);
                 }
 
-                var success = _dataHandler.DeleteAlbum(id);
+                var success = _albumHandler.Delete(id);
 
                 if (success == false)
                 {

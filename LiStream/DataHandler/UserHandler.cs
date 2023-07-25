@@ -4,11 +4,11 @@ using LiStreamData.DTO;
 
 namespace LiStream.DataHandler
 {
-    public class UserFactory : IDataFactory<IUserProfile, UserDto>
+    public class UserHandler : IDataItemHandler<IUserProfile, UserDto>
     {
         private readonly IDataHandler _dataHandler;
 
-        public UserFactory(IDataHandler dataHandler)
+        public UserHandler(IDataHandler dataHandler)
         {
             _dataHandler = dataHandler;
         }
@@ -31,6 +31,11 @@ namespace LiStream.DataHandler
         public IList<IUserProfile> GetAll()
         {
             return _dataHandler.GetUserProfiles();
+        }
+
+        public IUserProfile GetUserByEmail(string email)
+        {
+            return _dataHandler.GetUserByEmail(email);
         }
 
         public bool Update(UserDto dto)

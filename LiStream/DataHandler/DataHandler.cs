@@ -183,17 +183,17 @@ namespace LiStream.DataHandler
             return _writer.DeletePlayableCollectionFromUserFollowed(playlistalbumID, userID);
         }
 
-        public IList<IAlbum> GetArtistAlbums(Guid artistID)
+        public IList<IAlbum> GetAlbumsByArtist(Guid artistID)
         {
             return _reader.GetArtistAlbums(artistID).Select(x => _dtoHandler.ToAlbum(x)).ToList();
         }
 
-        public IList<IPlaylist> GetUserPlaylists(Guid userID)
+        public IList<IPlaylist> GetPlaylistsByUser(Guid userID)
         {
             return _reader.GetUserPlaylists(userID).Select(x => _dtoHandler.ToPlaylist(x)).ToList();
         }
 
-        public IList<ISong> GetFavoriteSongs(Guid userID)
+        public IList<ISong> GetUsersFavouriteSongs(Guid userID)
         {
             return _reader.GetFavoriteSongs(userID).Select(x => _dtoHandler.ToSong(x)).ToList();
         }
@@ -247,17 +247,17 @@ namespace LiStream.DataHandler
             return _evaluator.GetSimilarList(collection, GetPlayableCollections());
         }
 
-        public IList<ISong> GetPlaylistSongs(Guid playlistID)
+        public IList<ISong> GetSongsByPlaylist(Guid playlistID)
         {
             return _reader.GetPlaylistSongs(playlistID).Select(x => _dtoHandler.ToSong(x)).ToList();
         }
 
-        public IList<ISong> GetAlbumSongs(Guid albumID)
+        public IList<ISong> GetSongsByAlbum(Guid albumID)
         {
             return _reader.GetAlbumSongs(albumID).Select(x => _dtoHandler.ToSong(x)).ToList();
         }
 
-        public IList<ISong> GetArtistSongs(Guid artistID)
+        public IList<ISong> GetSongsByArtist(Guid artistID)
         {
             return _reader.GetArtistSongs(artistID).Select(x => _dtoHandler.ToSong(x)).ToList();
         }
@@ -265,6 +265,11 @@ namespace LiStream.DataHandler
         public IList<IUserProfile> GetUserProfiles()
         {
             return _reader.GetUserProfiles().Select(x => _dtoHandler.ToUser(x)).ToList();
+        }
+
+        public IUserProfile GetUserByEmail(string email)
+        {
+            return _dtoHandler.ToUser(_reader.GetUserByEmail(email));
         }
     }
 }
